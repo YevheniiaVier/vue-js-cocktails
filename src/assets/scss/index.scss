@@ -1,0 +1,16 @@
+@import "./reset";
+@import "./vars";
+@import "./mixins";
+
+* {
+  box-sizing: border-box;
+
+  &::before,
+  &::after {
+    box-sizing: inherit;
+  }
+}
+body {
+  background-color: rgb(35, 3, 18);
+  // height: 100%;
+}
