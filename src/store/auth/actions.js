@@ -35,7 +35,7 @@ export const refreshUser = async () => {
   const { token } = store.state.auth;
 
   if (!token) {
-    return alert("token is not valid");
+    return;
   }
   try {
     const result = await getUser(token);

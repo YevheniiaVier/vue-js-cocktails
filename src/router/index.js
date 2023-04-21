@@ -3,13 +3,14 @@ import { createRouter, createWebHistory } from "vue-router";
 import DefaultLayout from "../components/DefaultLayout.vue";
 import GuestLayout from "../components/GuestLayout.vue";
 
-import LoginView from "../views/LoginView.vue";
-import HomeView from "../views/HomeView.vue";
-import ErrorView from "../views/ErrorView.vue";
-import CocktailsByNameView from "../views/CocktailsByNameView.vue";
-import IngredientsView from "../views/IngredientsView.vue";
-import CocktailItemView from "../views/CocktailItemView.vue";
-import RegisterView from "../views/RegisterView.vue";
+const LoginView = () => import("../views/LoginView.vue");
+const HomeView = () => import("../views/HomeView.vue");
+const ErrorView = () => import("../views/ErrorView.vue");
+const CocktailsByNameView = () => import("../views/CocktailsByNameView.vue");
+const IngredientsView = () => import("../views/IngredientsView.vue");
+const CocktailItemView = () => import("../views/CocktailItemView.vue");
+const RegisterView = () => import("../views/RegisterView.vue");
+
 import store from "../store";
 
 const router = createRouter({
