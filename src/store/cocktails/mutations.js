@@ -1,5 +1,9 @@
 export function setSearchedCocktails(state, data) {
-  state.searchedCocktails = [...data];
+  if (!data) {
+    state.searchedCocktails = [];
+  } else {
+    state.searchedCocktails = [...data];
+  }
 }
 
 export function setCocktailsByLetter(state, data) {
