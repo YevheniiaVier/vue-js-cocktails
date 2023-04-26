@@ -19,7 +19,7 @@ export const getIngredients = async () => {
   return data;
 };
 
-export const searchByIngredients = async (ingredient) => {
+export const searchByIngredient = async (ingredient) => {
   const { data } = await instance.get(`filter.php?i=${ingredient}`);
   return data;
 };
@@ -29,7 +29,7 @@ export const getRandomCocktail = async () => {
   return data;
 };
 
-export const getCocktailByLetter = async (letter) => {
+export const getCocktailsByLetter = async (letter) => {
   const { data } = await instance.get(`search.php?f=${letter}`);
   return data;
 };

@@ -8,17 +8,28 @@
 </template>
 <script setup>
 import { ref, reactive, watch, computed } from "vue";
+// import { useToast } from "vue-toast-notification";
+// import "vue-toast-notification/dist/theme-sugar.css";
+// import { useRouter } from "vue-router";
+import { useStore, mapGetters } from "vuex";
+const store = useStore();
 
 import CocktailsList from "@/components/cocktails/CocktailsList.vue";
-import { searchCocktailByName } from "@/services/cocktails-api";
+// import { searchCocktailByName } from "@/services/cocktails-api";
 import CocktailsFilterForm from "@/components/cocktails/CocktailsFilterForm.vue";
 import AppContainer from "@/components/shared/AppContainer.vue";
 
-const cocktails = reactive([]);
+const searchedCocktails = computed(() => {
+  return store.getters["cocktails/getSearchedCocktails"];
+});
+
+const filteredCocktails = computed(() => {
+  console.log(store.getters["cocktails/getFilteredCocktails"]);
+  return store.getters["cocktails/getFilteredCocktails"];
+});
 
 const keyword = ref("");
 
-const categoryFilter = ref("");
 const emptySearch = ref(false);
 
 const handleSearch = (data) => {
@@ -30,44 +41,45 @@ const handleSearch = (data) => {
     searchCocktails(keyword.value);
   }
 };
-const onSelect = (category) => {
-  categoryFilter.value = category;
+const onSelect = async (category) => {
+  console.log(category, "category on select");
+
+  await store.dispatch("filter/setFilter", category);
 };
 
-function filterByCategory(value) {
-  // if (!cocktails.value) {
-  //   return alert("please make you search first");
-  // }
+// function filterByCategory(value) {
+//   if (!searchedCocktails) {
+//     return;
+//   }
 
-  if (value !== "Non alcoholic" && value !== "Alcoholic") {
-    return cocktails.value;
-  }
-  const cocktailsByCategory = cocktails.value.filter(
-    (cocktail) => cocktail.strAlcoholic === value
-  );
-  if (!cocktailsByCategory.length) {
-    return;
-  }
-  return cocktailsByCategory;
-}
+//   if (value !== "Non alcoholic" && value !== "Alcoholic") {
+//     return (filteredCocktails.value = searchedCocktails);
+//   }
+//   const filtered = searchedCocktails.value.filter(
+//     (cocktail) => cocktail.strAlcoholic === value
+//   );
+//   if (!filtered.length) {
+//     return;
+//   }
+//   // тепер не парцює фільтр по категорії
+//   return (filteredCocktails.value = filtered);
+// }
 
 async function searchCocktails(query) {
-  const { drinks } = await searchCocktailByName(query);
-  if (!drinks) {
+  await store.dispatch("cocktails/searchCocktailsByName", query);
+  if (!searchedCocktails) {
     console.log("no drinks");
     emptySearch.value = true;
     return;
   }
 
   emptySearch.value = false;
-  cocktails.value = [...drinks];
-  console.log(cocktails.value);
+  // filteredCocktails.value = [...searchedCocktails.value];
+  // filterByCategory(categoryFilter.value);
+  console.log(searchedCocktails.value, "jaja");
 
-  return cocktails.value;
+  return searchedCocktails;
 }
-const filteredCocktails = computed(() => {
-  return filterByCategory(categoryFilter.value);
-});
 </script>
 <style lang="scss" scoped>
 .title {
