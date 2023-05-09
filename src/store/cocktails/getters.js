@@ -21,12 +21,12 @@ export const getFilteredCocktails = (
   return searchedCocktails;
 };
 
-export const getCocktailsByLetter = ({ cocktailsByLetter }) => {
-  return cocktailsByLetter;
-};
-export const getCocktailsByIngredient = ({ cocktailsByIngredient }) => {
-  return cocktailsByIngredient;
-};
+// export const getCocktailsByLetter = ({ cocktailsByLetter }) => {
+//   return cocktailsByLetter;
+// };
+// export const getCocktailsByIngredient = ({ cocktailsByIngredient }) => {
+//   return cocktailsByIngredient;
+// };
 
 export const getIngredients = ({ ingredients }) => {
   return ingredients;

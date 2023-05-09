@@ -5,6 +5,7 @@ import {
   getUser,
   setAuthHeader,
   clearAuthHeader,
+  updateAvatar,
 } from "../../services/auth-api";
 
 import store from "../../store";
@@ -31,7 +32,7 @@ export const logOut = async ({ commit }) => {
   clearAuthHeader();
 };
 
-export const refreshUser = async () => {
+export const refreshUser = async ({ commit }) => {
   const { token } = store.state.auth;
 
   if (!token) {
@@ -39,8 +40,23 @@ export const refreshUser = async () => {
   }
   try {
     const result = await getUser(token);
-    return result;
+    commit("setUserData", result);
   } catch (error) {
+    console.log(error);
+
+    commit("clearUserData");
+    clearAuthHeader();
+    throw error;
+  }
+};
+
+export const changeAvatar = async ({ commit }, payload) => {
+  try {
+    const { avatarURL, message } = await updateAvatar(payload);
+    commit("setNewAvatar", avatarURL);
+    return message;
+  } catch (error) {
+    console.log(error);
     throw error;
   }
 };

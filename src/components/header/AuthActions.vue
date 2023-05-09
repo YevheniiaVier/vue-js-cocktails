@@ -1,10 +1,16 @@
 <template>
   <div class="auth__actions">
-    <RouterLink :to="{ name: 'login-page' }" class="auth__link"
+    <RouterLink
+      exact-active-class="active-link"
+      :to="{ name: 'login-page' }"
+      class="auth__link"
       >Login</RouterLink
     >
     |
-    <RouterLink :to="{ name: 'register-page' }" class="auth__link"
+    <RouterLink
+      exact-active-class="active-link"
+      :to="{ name: 'register-page' }"
+      class="auth__link"
       >Registration</RouterLink
     >
   </div>

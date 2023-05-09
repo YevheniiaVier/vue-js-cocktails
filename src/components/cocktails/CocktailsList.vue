@@ -3,7 +3,7 @@
     <CocktailItem
       :cocktail="cocktail"
       v-for="cocktail in props.cocktails"
-      :key="cocktail.idDrink"
+      :key="cocktail._id"
     />
   </ul>
 </template>
@@ -22,9 +22,12 @@ const props = defineProps({
 <style lang="scss" scoped>
 .cocktails {
   &__list {
+    margin-top: 25px;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     grid-gap: 25px;
+    justify-items: center;
+    place-items: center;
   }
 }
 </style>

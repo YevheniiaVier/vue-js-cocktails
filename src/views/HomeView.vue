@@ -1,49 +1,30 @@
 <template>
   <AppContainer>
     <h1 class="title">Random Cocktails</h1>
-    <CocktailsList :cocktails="cocktails" />
+    <Suspense>
+      <RandomCocktails />
+      <template #fallback>
+        <!-- <div>
+        <p v-if="error">{{ error }}</p> -->
+        <CircleLoader />
+        <!-- <p>fallback rendered</p>
+      </div> -->
+      </template>
+    </Suspense>
   </AppContainer>
 </template>
+
 <script setup>
-import { onMounted, ref } from "vue";
-import { computed } from "@vue/reactivity";
-import { getRandomCocktail } from "@/services/cocktails-api";
-import CocktailsList from "@/components/cocktails/CocktailsList.vue";
-// import CocktailsFilterForm from "@/components/cocktails/CocktailsFilterForm.vue";
+import { ref, onErrorCaptured, Suspense } from "vue";
+
+import CircleLoader from "../components/loaders/CircleLoader.vue";
+import RandomCocktails from "../components/cocktails/RandomCocktails.vue";
 import AppContainer from "@/components/shared/AppContainer.vue";
 
-const cocktails = ref([]);
-// const categoryFilter = ref("");
-// const nameFilter = ref("");
+const error = ref(null);
 
-// const handleFilter = (data) => {
-//   categoryFilter.value = data.category;
-//   nameFilter.value = data.inputValue;
-// };
-
-// const filteredCocktails = computed(() => filterByName(cocktails.value));
-
-// const filterByCategory = (category) => {
-//   if (!categoryFilter.value) {
-//     console.log("empty");
-//     return cocktails.value;
-//   }
-//   return cocktails.value.filter(
-//     (cocktail) => cocktail.strAlcoholic === category
-//   );
-// };
-
-// const filterByName = (keyword) => {
-//   if (!nameFilter.value) return cocktails.value;
-//   return cocktails.value.filter((cocktail) =>
-//     cocktail.strDrink.includes(keyword)
-//   );
-// };
-onMounted(async () => {
-  for (let i = 0; i < 15; i++) {
-    const result = await getRandomCocktail();
-    cocktails.value.push(result.drinks[0]);
-  }
+onErrorCaptured(() => {
+  error.value = "Sorry, something went wrong...";
 });
 </script>
 <style lang="scss" scoped>

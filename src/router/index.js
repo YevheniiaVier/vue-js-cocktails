@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router";
-
 import DefaultLayout from "../components/DefaultLayout.vue";
 import GuestLayout from "../components/GuestLayout.vue";
 
@@ -7,7 +6,8 @@ const LoginView = () => import("../views/LoginView.vue");
 const HomeView = () => import("../views/HomeView.vue");
 const ErrorView = () => import("../views/ErrorView.vue");
 const CocktailsByNameView = () => import("../views/CocktailsByNameView.vue");
-const IngredientsView = () => import("../views/IngredientsView.vue");
+const FavoriteCocktailsView = () =>
+  import("../views/FavoriteCocktailsView.vue");
 const CocktailItemView = () => import("../views/CocktailItemView.vue");
 const RegisterView = () => import("../views/RegisterView.vue");
 
@@ -26,7 +26,7 @@ const router = createRouter({
           component: HomeView,
         },
         {
-          path: "/by-name/:name?",
+          path: "/by-name",
           name: "byName",
           component: CocktailsByNameView,
           meta: {
@@ -34,9 +34,9 @@ const router = createRouter({
           },
         },
         {
-          path: "/ingredients",
-          name: "ingredients",
-          component: IngredientsView,
+          path: "/favorite",
+          name: "favorite",
+          component: FavoriteCocktailsView,
         },
 
         {
@@ -71,14 +71,6 @@ const router = createRouter({
       name: "error-page",
       component: ErrorView,
     },
-    // {
-    //   path: '/about',
-    //   name: 'about',
-    //   // route level code-splitting
-    //   // this generates a separate chunk (About.[hash].js) for this route
-    //   // which is lazy-loaded when the route is visited.
-    //   component: () => import('../views/AboutView.vue')
-    // }
   ],
 });
 router.beforeEach((to, from, next) => {

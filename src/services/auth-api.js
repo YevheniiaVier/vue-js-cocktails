@@ -1,8 +1,7 @@
 import axios from "axios";
-import store from "../store";
 
 const authInstance = axios.create({
-  baseURL: "https://apt-booking-api.herokuapp.com/",
+  baseURL: "https://cocktails-backend.onrender.com/api/",
 });
 
 export const setAuthHeader = (token) => {
@@ -13,17 +12,17 @@ export const clearAuthHeader = () => {
 };
 
 export const loginUser = async (user) => {
-  const { data } = await authInstance.post("users/login", user);
+  const { data } = await authInstance.post("auth/login", user);
   return data;
 };
 
 export const registerUser = async (user) => {
-  const { data } = await authInstance.post("users/register", user);
+  const { data } = await authInstance.post("auth/register", user);
   return data;
 };
 
 export const logOutUser = async () => {
-  const { data: result } = await authInstance.post("users/logout");
+  const { data: result } = await authInstance.post("auth/logout");
   clearAuthHeader();
   return result;
 };
@@ -31,11 +30,21 @@ export const logOutUser = async () => {
 export const getUser = async (token) => {
   try {
     setAuthHeader(token);
-
-    const { data } = await authInstance.get("/users/current");
+    const { data } = await authInstance.get("/user/current");
     return data;
   } catch (error) {
+    console.log(error);
     clearAuthHeader();
     throw error;
   }
+};
+
+export const updateAvatar = async (file) => {
+  const formData = new FormData();
+  formData.append("avatar", file);
+
+  const { data } = await authInstance.patch("/user/avatars", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return data;
 };

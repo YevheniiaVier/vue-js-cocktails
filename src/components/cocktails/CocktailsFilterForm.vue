@@ -13,7 +13,9 @@
       class="form__input"
       v-model="formData.searchInput"
     />
-    <AppButton type="submit" variant="primary" size="large">SubmiTTT</AppButton>
+    <AppButton :loading="loading" type="submit" variant="primary" size="large"
+      >SubmiTTT</AppButton
+    >
   </AppForm>
 </template>
 
@@ -31,7 +33,12 @@ const handleSubmit = () => {
     inputValue: formData.searchInput,
   });
 };
-
+const props = defineProps({
+  loading: {
+    type: Boolean,
+    default: false,
+  },
+});
 const formData = reactive({
   searchInput: "",
   category: "",

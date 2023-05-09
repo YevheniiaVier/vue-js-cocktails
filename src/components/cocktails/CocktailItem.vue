@@ -1,34 +1,33 @@
 <template>
-  <router-link :to="{ name: 'cocktail', params: { id: cocktail.idDrink } }">
-    <div class="cocktail">
-      <div class="cocktail__wrapper">
-        <img
-          class="cocktail__img"
-          :src="cocktail.strDrinkThumb"
-          :alt="cocktail.strDrink"
-        />
-        <div class="cocktail__info">
-          <p>{{ cocktail.strAlcoholic }}</p>
-          <p class="ingredients">Ingredients:</p>
-          <ul class="ingredients__list">
-            <template v-for="(el, idx) of new Array(15)" :key="idx">
-              <li v-if="cocktail[`strIngredient${idx + 1}`]">
-                {{ idx + 1 }}. {{ cocktail[`strIngredient${idx + 1}`] }}
-              </li>
-            </template>
-          </ul>
-        </div>
+  <RouterLink
+    class="cocktail"
+    :to="{ name: 'cocktail', params: { id: cocktail._id } }"
+  >
+    <div class="cocktail__wrapper">
+      <img
+        class="cocktail__img"
+        :src="cocktail.strDrinkThumb"
+        :alt="cocktail.strDrink"
+      />
+      <div class="cocktail__info">
+        <p>{{ cocktail.strAlcoholic }}</p>
+        <p class="ingredients">Ingredients:</p>
+        <ul class="ingredients__list">
+          <template v-for="(el, idx) of new Array(15)" :key="idx">
+            <li v-if="cocktail[`strIngredient${idx + 1}`]">
+              {{ idx + 1 }}. {{ cocktail[`strIngredient${idx + 1}`] }}
+            </li>
+          </template>
+        </ul>
       </div>
-
-      <h2 class="cocktail__title">{{ cocktail.strDrink }}</h2>
     </div>
-  </router-link>
+
+    <h2 class="cocktail__title">{{ cocktail.strDrink }}</h2>
+  </RouterLink>
 </template>
 
 <script setup>
-
-// eslint-disable-next-line
-const { cocktail } = defineProps({
+const props = defineProps({
   cocktail: {
     required: true,
     type: Object,
@@ -40,8 +39,11 @@ const { cocktail } = defineProps({
 @import "../../assets/scss";
 .cocktail {
   color: $text-color;
-  width: 200px;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
   @include transition(color);
   cursor: pointer;
 
@@ -66,6 +68,10 @@ const { cocktail } = defineProps({
 
   &__info {
     position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     top: 0;
     left: 0;
     width: 100%;
@@ -86,9 +92,11 @@ const { cocktail } = defineProps({
   margin-top: 10px;
   margin-bottom: 5px;
   &__list {
+    margin-top: 5px;
     max-height: calc(1em * 1.3 * 6);
     overflow: hidden;
     line-height: 1.3;
+    align-self: left;
   }
 
   &__item {

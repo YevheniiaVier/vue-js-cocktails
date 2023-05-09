@@ -44,7 +44,7 @@ const contentStyle = computed(() => ({
   background: $main-color;
   color: #fff;
   cursor: pointer;
-  min-width: 220px;
+  max-width: 220px;
   border: 1px solid transparent;
   padding: 8px 15px;
   font-family: Montserrat, sans-serif;
@@ -56,7 +56,6 @@ const contentStyle = computed(() => ({
 
   &:hover {
     background: $accent-color;
-    // color: #ff662d;
     border: 1px solid darken($accent-color, 10%);
   }
   &--outlined {

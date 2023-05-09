@@ -1,13 +1,21 @@
 <template>
   <AppContainer>
     <h1 class="title">Find your cocktail here</h1>
-    <CocktailsFilterForm @onSelect="onSelect" @submit="handleSearch" />
+    <CocktailsFilterForm
+      :loading="loading"
+      @onSelect="onSelect"
+      @submit="handleSearch"
+    />
     <p v-if="emptySearch">No results for your search</p>
-    <CocktailsList v-else :cocktails="filteredCocktails || []" />
+    <CocktailsList
+      :loading="loading"
+      v-else
+      :cocktails="filteredCocktails || []"
+    />
   </AppContainer>
 </template>
 <script setup>
-import { ref, reactive, watch, computed } from "vue";
+import { ref, computed } from "vue";
 // import { useToast } from "vue-toast-notification";
 // import "vue-toast-notification/dist/theme-sugar.css";
 // import { useRouter } from "vue-router";
@@ -17,23 +25,28 @@ const store = useStore();
 import CocktailsList from "@/components/cocktails/CocktailsList.vue";
 import CocktailsFilterForm from "@/components/cocktails/CocktailsFilterForm.vue";
 import AppContainer from "@/components/shared/AppContainer.vue";
-
+import { useToast } from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
 const searchedCocktails = computed(() => {
   return store.getters["cocktails/getSearchedCocktails"];
 });
-
+const $toast = useToast();
 const filteredCocktails = computed(() => {
   return store.getters["cocktails/getFilteredCocktails"];
 });
 
 const keyword = ref("");
-
+const loading = ref(false);
 const emptySearch = ref(false);
 
 const handleSearch = (data) => {
   keyword.value = data.inputValue;
   if (!keyword.value) {
-    return alert(" please enter something");
+    $toast.open({
+      message: "Please enter something",
+      type: "warning",
+      position: "top-right",
+    });
   }
   if (keyword.value) {
     searchCocktails(keyword.value);
@@ -44,8 +57,20 @@ const onSelect = async (category) => {
 };
 
 async function searchCocktails(query) {
-  await store.dispatch("cocktails/searchCocktailsByName", query);
-  console.log(searchedCocktails.value);
+  try {
+    loading.value = true;
+    await store.dispatch("cocktails/searchCocktailsByName", query);
+  } catch (error) {
+    console.log(error);
+    $toast.open({
+      message: error,
+      type: "error",
+      position: "top-right",
+    });
+  } finally {
+    loading.value = false;
+  }
+
   if (!searchedCocktails.value.length) {
     emptySearch.value = true;
     return;
@@ -57,5 +82,8 @@ async function searchCocktails(query) {
 <style lang="scss" scoped>
 .title {
   color: white;
+  font-size: 25px;
+  text-align: center;
+  margin-top: 10px;
 }
 </style>

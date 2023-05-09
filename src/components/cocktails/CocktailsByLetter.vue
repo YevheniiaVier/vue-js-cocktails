@@ -10,4 +10,5 @@ const route = useRoute();
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 // const cocktails = computed(() => store.state.mealsByLetter);
 </script>
+
 <style lang="scss" scoped></style>

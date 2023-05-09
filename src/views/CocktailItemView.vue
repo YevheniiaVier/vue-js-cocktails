@@ -1,6 +1,7 @@
 <template>
   <section class="cocktail">
     <AppContainer>
+      <GoBackButton @click="goBack" />
       <div class="cocktail__main">
         <div class="cocktail__info">
           <h2 class="cocktail__title">{{ cocktail.strDrink }}</h2>
@@ -9,8 +10,20 @@
             :src="cocktail.strDrinkThumb"
             :alt="cocktail.strDrink"
           />
-          <div v-if="cocktail.strTags" class="cocktail__tags tags">
-            <p class="tags__names">{{ cocktail.strTags }}</p>
+          <div class="rating__tags">
+            <StarRating
+              @click="toggleModal"
+              :rating="ratings"
+              :key="ratingKey"
+            />
+            <p>Total votes: {{ votes }}</p>
+            <p v-if="cocktail.strTags" class="tags__names">
+              {{ cocktail.strTags }}
+            </p>
+          </div>
+          <div class="cocktail__type">
+            <p>Type: {{ cocktail.strAlcoholic }}</p>
+            <p>Category: {{ cocktail.strCategory }}</p>
           </div>
         </div>
 
@@ -43,64 +56,115 @@
       <p class="instructions__text">{{ cocktail.strInstructions }}</p>
       <h2 class="cocktail__glass glass">Glass</h2>
       <p class="glass__text">Serve: {{ cocktail.strGlass }}</p>
+      <Teleport to="#modal">
+        <Modal @close="toggleModal" :modalActive="modalActive">
+          <h1>this is Modal</h1>
+          <AddRating
+            @update-rating="updateRating"
+            @close="toggleModal"
+            :drinkId="cocktail._id"
+          ></AddRating>
+        </Modal>
+      </Teleport>
     </AppContainer>
   </section>
 </template>
 
 <script setup>
 import { useRoute } from "vue-router";
-import { ref, onMounted } from "vue";
-import { getCocktailById } from "@/services/cocktails-api";
+import { ref, onMounted, watch } from "vue";
+import { useRouter } from "vue-router";
+import { getCocktailById, getAverageRating } from "@/services/cocktails-api";
+import Modal from "../components/Modal.vue";
+import AddRating from "../components/AddRating.vue";
 import AppContainer from "@/components/shared/AppContainer.vue";
+import GoBackButton from "../components/shared/GoBackButton.vue";
+import StarRating from "../components/StarRating.vue";
 const route = useRoute();
 const cocktail = ref({});
-// const ingredients = ref([]);
+const router = useRouter();
+
+const modalActive = ref(false);
+
+const ratings = ref(0);
+const votes = ref(0);
+const ratingKey = ref(1);
 onMounted(async () => {
   const cocktailId = route.params.id;
   const result = await getCocktailById(cocktailId);
-  cocktail.value = result.drinks[0] || {};
+  cocktail.value = { ...result } || {};
+
+  const { averageRating, totalVotes } = await getAverageRating(cocktailId);
+  ratings.value = averageRating;
+  votes.value = totalVotes;
+});
+const updateRating = ({ avgRating, totalVotes }) => {
+  ratings.value = avgRating;
+  votes.value = totalVotes;
+};
+
+const goBack = () => {
+  window.history.length > 1 ? router.go(-1) : router.push("/");
+};
+
+const toggleModal = () => {
+  modalActive.value = !modalActive.value;
+};
+watch(ratings, (newRating, oldRating) => {
+  ratingKey.value += 1;
 });
 </script>
 
 <style lang="scss" scoped>
 @import "../assets/scss";
-.cocktail {
-  text-align: center;
 
+.cocktail {
   &__main {
     display: flex;
     gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
   }
+
+  // &__info {
+  // }
+
   &__title {
     font-weight: 600;
     font-size: 25px;
     line-height: 1.16;
     margin-bottom: 20px;
+    text-align: center;
   }
 
   &__img {
-    width: 400px;
+    max-width: 400px;
     height: auto;
     margin-bottom: 15px;
+    object-fit: cover;
+    border-radius: 10px;
   }
 
   &__tags {
     display: flex;
   }
 
-  &__ingredients {
-    margin-bottom: 20px;
+  &__type {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    gap: 15px;
+    padding: 10px;
+    color: $text-color;
+    font-weight: 600;
   }
 
-  &__instructions {
+  &__ingredients {
     font-weight: 600;
     font-size: 25px;
     line-height: 1.16;
     margin-bottom: 20px;
-  }
-
-  &__glass {
-    color: red;
+    text-align: center;
   }
 }
 .tags {
@@ -117,40 +181,56 @@ onMounted(async () => {
   }
 
   &__list {
-    color: gray;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 1.16;
+    margin-bottom: 20px;
+    color: $text-color;
+    font-weight: 600;
   }
 
   &__item {
-    color: yellow;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 
   &__img {
-    width: 200px;
+    max-width: 100px;
     height: auto;
   }
-
-  &__text {
-    color: yellow;
-  }
 }
+
 .instructions {
+  padding: 20px;
+  margin-bottom: 10px;
+  font-weight: 600;
+  font-size: 25px;
+  text-align: center;
   &__langs {
     margin-bottom: 20px;
+    text-align: center;
   }
 
   &__text {
+    text-align: center;
+    color: $text-color;
     font-weight: 600;
-    font-size: 16px;
-    line-height: 1.16;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
 }
 .glass {
-  margin-bottom: 15px;
+  text-align: center;
+  margin-bottom: 10px;
+
   &__text {
-    font-weight: 600;
+    font-weight: 500;
     font-size: 16px;
     line-height: 1.16;
+    text-align: center;
+    color: $text-color;
+    font-weight: 600;
   }
 }
 </style>

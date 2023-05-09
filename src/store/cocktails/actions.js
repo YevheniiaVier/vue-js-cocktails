@@ -10,12 +10,12 @@ export const searchCocktailsByLetter = async ({ commit }, letter) => {
   commit("setCocktailsByLetter", drinks);
 };
 
-export const searchCocktailsByIngredient = async ({ commit }, ingredient) => {
-  const { drinks } = await api.searchByIngredient(ingredient);
-  commit("setCocktailsByIngredient", drinks);
+export const getRandomCocktails = async ({ commit }) => {
+  const { drinks } = await api.getRandomCocktails();
+  commit("setSearchedCocktails", drinks);
 };
 
-export const searchIngredients = async ({ commit }, keyword) => {
-  const { drinks } = await api.searchByIngredient(keyword);
-  commit("setIngredients", drinks);
-};
+// export const searchIngredients = async ({ commit }, keyword) => {
+//   const { drinks } = await api.searchByIngredient(keyword);
+//   commit("setIngredients", drinks);
+// };

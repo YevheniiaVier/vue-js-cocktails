@@ -8,6 +8,7 @@
       :value="modelValue"
       @input="onInput"
       v-bind="$attrs"
+      autocomplete="off"
     />
   </div>
 </template>
