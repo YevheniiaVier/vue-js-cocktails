@@ -10,7 +10,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: url("../../assets/img/loginbcg.jpg");
+  background: url("../../../public/img/loginbcg.jpg");
   background-size: cover;
   background-position: center;
   min-height: calc(100vh - 90px);
