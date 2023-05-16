@@ -5,7 +5,7 @@
     :to="{ name: 'home' }"
   >
     <div class="logo__wrapper">
-      <img class="logo__img" src="../assets/logo.png" alt="logo" />
+      <img class="logo__img" src="../../public/logo.png" alt="logo" />
     </div>
     <p class="logo_text">Home</p>
   </RouterLink>
