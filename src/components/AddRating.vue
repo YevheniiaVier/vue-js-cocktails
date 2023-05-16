@@ -1,7 +1,7 @@
 <template>
   <section class="rating">
     <div class="logo">
-      <img src="../../star-filled.svg" alt="star" />
+      <img src="../../public/star-filled.svg" alt="star" />
     </div>
 
     <div class="intro">

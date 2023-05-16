@@ -58,11 +58,11 @@ const ratingWidthStyle = computed(() => {
   flex-shrink: 0;
 
   &--colored {
-    background: url("../../star-filled.svg") center no-repeat;
+    background: url("../../public/star-filled.svg") center no-repeat;
   }
 
   &--outlined {
-    background: url("../../star-outlined.svg") center no-repeat;
+    background: url("../../public/star-outlined.svg") center no-repeat;
   }
 }
 </style>
