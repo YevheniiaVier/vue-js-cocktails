@@ -72,7 +72,8 @@
 
 <script setup>
 import { useRoute } from "vue-router";
-import { ref, onMounted, watch } from "vue";
+import { useStore } from "vuex";
+import { ref, onMounted, computed, watch } from "vue";
 import { useRouter } from "vue-router";
 import { getCocktailById, getAverageRating } from "@/services/cocktails-api";
 import Modal from "../components/Modal.vue";
@@ -80,9 +81,17 @@ import AddRating from "../components/AddRating.vue";
 import AppContainer from "@/components/shared/AppContainer.vue";
 import GoBackButton from "../components/shared/GoBackButton.vue";
 import StarRating from "../components/StarRating.vue";
+
+import { useToast } from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
+
 const route = useRoute();
 const cocktail = ref({});
 const router = useRouter();
+const $toast = useToast();
+const store = useStore();
+
+const isLoggedIn = store.getters["auth/isLoggedIn"];
 
 const modalActive = ref(false);
 
@@ -108,6 +117,14 @@ const goBack = () => {
 };
 
 const toggleModal = () => {
+  console.log(isLoggedIn);
+  if (!isLoggedIn) {
+    return $toast.open({
+      message: "Please log in to add value to the drink",
+      type: "warning",
+      position: "top-right",
+    });
+  }
   modalActive.value = !modalActive.value;
 };
 watch(ratings, (newRating, oldRating) => {

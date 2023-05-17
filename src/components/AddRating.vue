@@ -1,7 +1,7 @@
 <template>
   <section class="rating">
     <div class="logo">
-      <img src="../../public/star-filled.svg" alt="star" />
+      <img src="/star-filled.svg" alt="star" />
     </div>
 
     <div class="intro">
@@ -31,10 +31,11 @@
 <script setup>
 import { addRating, getAverageRating } from "@/services/cocktails-api";
 import { ref, computed, onMounted } from "vue";
-import { useToast } from "vue-toast-notification";
-import "vue-toast-notification/dist/theme-sugar.css";
+// import { useToast } from "vue-toast-notification";
+// import "vue-toast-notification/dist/theme-sugar.css";
 const rating = ref(1);
 const emit = defineEmits(["close", "update-rating"]);
+
 const props = defineProps({
   values: {
     type: Number,
@@ -45,7 +46,7 @@ const props = defineProps({
     required: true,
   },
 });
-const $toast = useToast();
+// const $toast = useToast();
 const onChange = (e) => {
   rating.value = e.target.value;
 };
@@ -56,11 +57,6 @@ const onSubmit = async () => {
     emit("update-rating", { avgRating, totalVotes });
   } catch (error) {
     console.log(error);
-    $toast.open({
-      message: "You have already valued this drink",
-      type: "error",
-      position: "top-right",
-    });
   }
   emit("close");
 };

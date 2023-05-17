@@ -45,6 +45,8 @@ const loading = ref(false);
 
 const onFileChange = (event) => {
   file.value = event.target.files[0];
+
+
   if (file) {
     buttonText.value = file.value.name;
   } else {
@@ -54,6 +56,8 @@ const onFileChange = (event) => {
 const emit = defineEmits(["upload"]);
 
 const uploadPhoto = async () => {
+ 
+
   await sendPhoto();
   emit("upload");
 };
@@ -77,7 +81,7 @@ const sendPhoto = async () => {
     console.log(error);
 
     $toast.open({
-      message: error,
+      message: error.name,
       type: "error",
       position: "top-right",
     });

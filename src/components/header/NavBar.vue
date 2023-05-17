@@ -91,7 +91,7 @@ const BASE_AVATAR_URL = computed(() => {
   if (user.value && user.value.avatarURL) {
     const url = user.value.avatarURL.includes("gravatar")
       ? user.value.avatarURL
-      : `https://cocktails-backend.onrender.com/${user.value.avatarURL}`;
+      : `${user.value.avatarURL}`;
     return url;
   }
 });
