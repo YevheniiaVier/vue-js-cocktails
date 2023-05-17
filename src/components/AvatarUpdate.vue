@@ -28,10 +28,7 @@
 <script setup>
 import { ref } from "vue";
 import { Icon } from "@iconify/vue";
-// import AppForm from "./shared/form/AppForm.vue";
-// import AppInput from "./shared/form/AppInput.vue";
-// import AppButton from "./shared/AppButton.vue";
-// const emit = defineEmits(["sendPhoto"]);
+
 import { useStore } from "vuex";
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
@@ -39,27 +36,34 @@ import CircleLoader from "./loaders/CircleLoader.vue";
 const store = useStore();
 
 const $toast = useToast();
-const buttonText = ref("Choose file");
+const buttonText = ref("Choose file to change your avatar");
 const file = ref(null);
 const loading = ref(false);
+const previewImage = ref(null);
+
+
 
 const onFileChange = (event) => {
   file.value = event.target.files[0];
-
-
   if (file) {
     buttonText.value = file.value.name;
+    previewImage.value = URL.createObjectURL(file.value);
+    emit("onFileChoose", previewImage.value) 
   } else {
-    buttonText.value = "Choose file";
+    buttonText.value = "Choose file to change your avatar";
+    previewImage.value = null;
+    emit("onFileChoose", null);
   }
 };
-const emit = defineEmits(["upload"]);
+const emit = defineEmits(["upload", "onFileChoose"]);
+
 
 const uploadPhoto = async () => {
  
 
   await sendPhoto();
   emit("upload");
+  previewImage.value = null;
 };
 
 const sendPhoto = async () => {
@@ -74,7 +78,6 @@ const sendPhoto = async () => {
   try {
     loading.value = true;
     await store.dispatch("auth/changeAvatar", file.value);
-    // await store.dispatch("auth/changeAvatar", file.value);
 
     file.value = null;
   } catch (error) {

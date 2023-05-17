@@ -9,8 +9,12 @@ const searchedCocktails = computed(() => {
 });
 
 async function getCocktails() {
+try {
   await store.dispatch("cocktails/getRandomCocktails");
   return searchedCocktails;
+} catch (error) {
+  console.log(error)
+}
 }
 await getCocktails();
 </script>

@@ -19,9 +19,10 @@
       <div class="avatar">
         <img
           v-if="user.avatarURL"
-          class="account__icon"
+          class="account__img"
           :src="BASE_AVATAR_URL"
           alt="User avatar"
+          @click="toggleModal"
         />
         <svg
           v-else
@@ -58,8 +59,11 @@
     </div>
     <Teleport to="#modal">
       <Modal @close="toggleModal" :modalActive="modalActive">
-        <!-- <h1 class="modal__title">You can change your avatar if you like</h1> -->
-        <AvatarUpdate @upload="photoUploaded" class="modal__content">
+        <div  class="modal__avatar">
+          <img v-if="previewImage" :src="previewImage" alt="Avatar photo" class="avatar__big" />
+          <img  v-else :src="BASE_AVATAR_URL" alt="Avatar photo" class="avatar__big">
+        </div>
+        <AvatarUpdate @upload="photoUploaded" @onFileChoose="updatePreviewImage" class="modal__content">
         </AvatarUpdate>
       </Modal>
     </Teleport>
@@ -76,22 +80,29 @@ import AvatarUpdate from "../AvatarUpdate.vue";
 const store = useStore();
 const router = useRouter();
 
+
 const user = computed(() => {
   return store.getters["auth/getUser"];
 });
+const previewImage = ref(null);
+
+const updatePreviewImage = (image) => {
+  previewImage.value = image;
+};
+
 const modalActive = ref(false);
 const toggleModal = () => {
   modalActive.value = !modalActive.value;
+  previewImage.value = null;
 };
 const photoUploaded = () => {
   modalActive.value = false;
+
 };
 
 const BASE_AVATAR_URL = computed(() => {
   if (user.value && user.value.avatarURL) {
-    const url = user.value.avatarURL.includes("gravatar")
-      ? user.value.avatarURL
-      : `${user.value.avatarURL}`;
+    const url = user.value.avatarURL
     return url;
   }
 });
@@ -150,6 +161,14 @@ const handleLogout = async () => {
   overflow: hidden;
   display: block;
 }
+.account__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 50%;
+  object-fit: cover;
+}
 .profile {
   display: flex;
   gap: 5px;
@@ -169,6 +188,19 @@ const handleLogout = async () => {
   align-items: center;
   justify-content: center;
   border-radius: 50%;
+}
+.modal__avatar {
+max-width: 90%;
+max-height: 500px;
+display: flex;
+margin-bottom: 20px;
+}
+.avatar__big {
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
 }
 .modal__title {
   font-size: 25px;

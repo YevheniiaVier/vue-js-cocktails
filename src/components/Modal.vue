@@ -114,6 +114,7 @@ watch(
     left: 50%;
     transform: translate(-50%, -50%);
     min-height: 380px;
+    max-height: 600px;
     max-width: 600px;
     width: 80%;
     width: 100%;
@@ -125,7 +126,7 @@ watch(
       #e3fdf5 50%
     );
     @media screen and (min-height: 10px) and (max-height: 450px) {
-      top: 200px;
+      top: 300px;
     }
   }
   border-radius: 3px;
