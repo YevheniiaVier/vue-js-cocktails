@@ -58,7 +58,7 @@
       </button>
     </div>
     <Teleport to="#modal">
-      <Modal @close="toggleModal" :modalActive="modalActive">
+      <Modal @close="toggleModal" @keydown.escape="handleEscapeKey" :modalActive="modalActive">
         <div  class="modal__avatar">
           <img v-if="previewImage" :src="previewImage" alt="Avatar photo" class="avatar__big" />
           <img  v-else :src="BASE_AVATAR_URL" alt="Avatar photo" class="avatar__big">
@@ -70,7 +70,7 @@
   </nav>
 </template>
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 // import { onClickOutside } from "@vueuse/core";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
@@ -86,11 +86,17 @@ const user = computed(() => {
 });
 const previewImage = ref(null);
 
+const handleEscapeKey = () => {
+  if (modalActive.value) {
+    toggleModal();
+  }
+};
 const updatePreviewImage = (image) => {
   previewImage.value = image;
 };
 
 const modalActive = ref(false);
+
 const toggleModal = () => {
   modalActive.value = !modalActive.value;
   previewImage.value = null;
@@ -115,6 +121,16 @@ const handleLogout = async () => {
     console.log(error);
   }
 };
+watch(
+  () => modalActive.value,
+  (isActive) => {
+    if (isActive) {
+      window.addEventListener("keydown", handleEscapeKey);
+    } else {
+      window.removeEventListener("keydown", handleEscapeKey);
+    }
+  }
+);
 </script>
 
 <style lang="scss" scoped>
