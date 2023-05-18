@@ -1,6 +1,6 @@
 <template>
   <div class="input__wrap">
-    <label for="{{ id }}" v-if="label">{{ label }}</label>
+    <label class="label" for="{{ id }}" v-if="label">{{ label }}</label>
     <input
       :id="id"
       class="input"

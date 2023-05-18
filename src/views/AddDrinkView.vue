@@ -3,16 +3,20 @@
     <!-- <p v-if="ingredients.length">{{ingredients}}</p> -->
     <AppForm @submit="handleSubmit">
       <AppInput
+        :required="true"
+        class="required-field"
         id="strDrink"
-        label="Drink Name"
+        label="Drink Name *"
         v-model="formData.strDrink"
         required
       />
       <AppInput
+        :required="true"
+        class="required-field"
         @change="onFileChange"
         type="file"
         id="strDrinkThumb"
-        label="Drink photo"
+        label="Drink photo *"
         v-model="formData.strDrinkThumb"
       />
       <AppInput id="strTags" label="Tags" v-model="formData.strTags" />
@@ -22,13 +26,17 @@
         v-model="formData.strVideo"
       />
       <AppSelect
+        :required="true"
+        class="required-field"
         @select="onSelect('strCategory', $event)"
         id="strCategory"
-        label="Category"
+        label="Category *"
         :items="categorySelectItems"
         v-model="formData.strCategory"
       />
       <AppSelect
+        :required="true"
+        class="required-field"
         @select="onSelect('strAlcoholic', $event)"
         id="strAlcoholic"
         label="strAlcoholic"
@@ -38,6 +46,8 @@
       <AppInput id="strGlass" label="Glass" v-model="formData.strGlass" />
       <label for="strInstructions">Write instructions</label>
       <textarea
+        :required="true"
+        class="required-field"
         id="strInstructions"
         label="Instructions"
         rows="5"
@@ -50,7 +60,14 @@
         id="strInstructionsES"
         label="strInstructionsES"
         v-model="formData.strInstructionsES"
-      />
+      />.required-field input {
+        border-color: red;
+      }
+      .required-field label::after {
+        content: '*';
+        color: red;
+        margin-left: 4px;
+      }
       <AppInput
         id="strInstructionsDE"
         label="strInstructionsDE"
@@ -170,7 +187,7 @@
 
 <script setup>
 import { reactive, ref, computed, onMounted, watch } from 'vue';
-import { useRouter } from "vue-router";
+import { useRouter } from 'vue-router';
 import useVuelidate from '@vuelidate/core';
 import AppForm from '../components/shared/form/AppForm.vue';
 import AppInput from '../components/shared/form/AppInput.vue';
@@ -305,13 +322,13 @@ const handleSubmit = async () => {
 
   const isFormValid = await v$.value.$validate();
   console.log(isFormValid, 'isFormValid');
-if(!isFormValid) {
+  if (!isFormValid) {
     $toast.open({
-        message: "Please fill all required fields",
-        type: 'error',
-        position: 'top-right',
-      });
-}
+      message: 'Please fill all required fields',
+      type: 'error',
+      position: 'top-right',
+    });
+  }
   if (isFormValid) {
     try {
       loading.value = true;
@@ -347,7 +364,15 @@ if(!isFormValid) {
 //     border-color: $accent-color;
 //   }
 // }
-.simple-typeahead > input {
-  background-color: red;
+.required-field {
+  border-color: red;
 }
+.required-field .label::after {
+  content: '*';
+  color: red;
+  margin-left: 4px;
+}
+// .simple-typeahead > input {
+//   background-color: red;
+// }
 </style>

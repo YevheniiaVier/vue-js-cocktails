@@ -4,11 +4,9 @@
     <Suspense>
       <RandomCocktails />
       <template #fallback>
-        <!-- <div>
-        <p v-if="error">{{ error }}</p> -->
+
         <CircleLoader />
-        <!-- <p>fallback rendered</p>
-      </div> -->
+
       </template>
     </Suspense>
   </AppContainer>

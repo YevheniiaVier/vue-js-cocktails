@@ -18,6 +18,7 @@ try {
 }
 await getCocktails();
 </script>
+
 <template>
   <section>
     <CocktailsList :cocktails="searchedCocktails" />

@@ -40,6 +40,7 @@ const router = createRouter({
           path: "/my-page",
           name: "my-page",
           component: MyPageView,
+          redirect: "/my-drinks",
           children: [  {
             path: "/favorites",
             name: "favorites",

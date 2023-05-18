@@ -23,7 +23,7 @@ export const addCocktail = async (cocktail, file) => {
 };
 
 export const getCocktailById = async (cocktailId) => {
-  const { data } = await instance.get(`drinks/${cocktailId}`);
+  const { data } = await instance.get(`drinks/drink/${cocktailId}`);
   return data;
 };
 
@@ -39,6 +39,16 @@ export const searchDrinksByIngredient = async (ingredient) => {
 
 export const getRandomCocktails = async () => {
   const { data } = await instance.get("drinks/randoms");
+  return data;
+};
+
+export const getFavoriteCocktails = async () => {
+  const { data } = await instance.get("drinks/favorites");
+  return data;
+};
+
+export const getMyCocktails = async () => {
+  const { data } = await instance.get("drinks/my-drinks");
   return data;
 };
 
