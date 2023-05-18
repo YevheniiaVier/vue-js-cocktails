@@ -31,3 +31,7 @@ export const getFilteredCocktails = (
 export const getIngredients = ({ ingredients }) => {
   return ingredients;
 };
+
+export const getIngredientsList = ({ ingredientsList }) => {
+  return ingredientsList;
+};

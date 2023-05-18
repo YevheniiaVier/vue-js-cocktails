@@ -16,3 +16,6 @@ export function setSearchedCocktails(state, data) {
 export function setIngredients(state, data) {
   state.ingredients = [...data];
 }
+export function setIngredientsList(state, data) {
+  state.ingredientsList = [...data];
+}

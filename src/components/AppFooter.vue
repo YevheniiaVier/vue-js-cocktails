@@ -7,7 +7,7 @@
 @import "../assets/scss";
 .footer {
   z-index: 10;
-  height: 30px;
+  min-height: 30px;
   background-color: darken($background-color, 5%);
 }
 </style>

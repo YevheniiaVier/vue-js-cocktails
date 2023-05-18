@@ -86,7 +86,7 @@ const handleSubmit = async () => {
       console.log(error);
 
       $toast.open({
-        message: error.response.data.message,
+        message: error,
         type: "error",
         position: "top-right",
       });

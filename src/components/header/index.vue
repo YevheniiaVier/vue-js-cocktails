@@ -27,13 +27,14 @@ const isLoggedIn = computed(() => {
 @import "../../assets/scss";
 
 .header {
+  box-sizing: border-box;
   height: 60px;
   position: fixed;
   z-index: 10;
   top: 0;
   left: 0;
-  width: 100%;
-  // padding: 16px 0;
+  width: 100vw;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
   background-color: darken($background-color, 5%);
   color: $white-color;
   &__container {
@@ -42,6 +43,7 @@ const isLoggedIn = computed(() => {
   }
 }
 .header__container {
+  box-sizing: border-box;
   width: 100%;
   height: 100%;
   display: flex;

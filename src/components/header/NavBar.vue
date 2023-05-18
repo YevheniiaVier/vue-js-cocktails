@@ -3,9 +3,9 @@
     <RouterLink
       class="link"
       exact-active-class="active-link"
-      :to="{ name: 'favorite' }"
+      :to="{ name: 'my-page' }"
     >
-      My favorites
+      My Page
     </RouterLink>
 
     <RouterLink
@@ -137,6 +137,7 @@ watch(
 @import "../../assets/scss";
 
 .navbar {
+  box-sizing: border-box;
   padding: 5px;
   display: flex;
   gap: 1rem;
@@ -193,7 +194,7 @@ watch(
 }
 .active-link {
   color: $accent-color;
-  font-weight: bold;
+  // font-weight: bold;
 }
 .avatar {
   position: relative;

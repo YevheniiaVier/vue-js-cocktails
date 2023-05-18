@@ -19,3 +19,12 @@ export const getRandomCocktails = async ({ commit }) => {
 //   const { drinks } = await api.searchByIngredient(keyword);
 //   commit("setIngredients", drinks);
 // };
+
+export const getAllIngredients = async ({ commit }) => {
+  const { ingredients } = await api.getAllIngredients();
+  commit("setIngredients", ingredients);
+};
+export const getListIngredients = async ({ commit }) => {
+  const { ingredients } = await api.getListOfIngredients();
+  commit("setIngredientsList", ingredients);
+};

@@ -1,5 +1,6 @@
 import axios from "axios";
 import store from "../store";
+
 export const instance = axios.create({
   baseURL: "https://cocktails-backend.onrender.com/api/",
 });
@@ -9,13 +10,25 @@ export const searchCocktailByName = async (name) => {
   return data;
 };
 
+export const addCocktail = async (cocktail, file) => {
+  const formData = new FormData();
+  for (const key in cocktail) {
+    formData.append(key, cocktail[key]);
+  }
+  formData.append("image", file);
+  const { data } = await instance.post(`drinks/drink`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return data;
+};
+
 export const getCocktailById = async (cocktailId) => {
   const { data } = await instance.get(`drinks/${cocktailId}`);
   return data;
 };
 
-export const getIngredients = async () => {
-  const { data } = await instance.get(`ingredients`);
+export const getListOfIngredients = async () => {
+  const { data } = await instance.get(`ingredients/list`);
   return data;
 };
 

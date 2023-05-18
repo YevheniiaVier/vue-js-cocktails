@@ -53,35 +53,35 @@
 </template>
 
 <script setup>
-import { useToast } from "vue-toast-notification";
-import "vue-toast-notification/dist/theme-sugar.css";
+import { useToast } from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
 
-import { reactive, ref, computed } from "vue";
-import useVuelidate from "@vuelidate/core";
-import { required, minLength, email, sameAs } from "@vuelidate/validators";
-import AppForm from "../shared/form/AppForm.vue";
-import AppInput from "../shared/form/AppInput.vue";
-import AppButton from "../shared/AppButton.vue";
-import AuthSection from "../shared/AuthSection.vue";
-import LoginContainer from "../login/LoginContainer.vue";
-import { useRouter } from "vue-router";
-import store from "../../store";
+import { reactive, ref, computed } from 'vue';
+import useVuelidate from '@vuelidate/core';
+import { required, minLength, email, sameAs } from '@vuelidate/validators';
+import AppForm from '../shared/form/AppForm.vue';
+import AppInput from '../shared/form/AppInput.vue';
+import AppButton from '../shared/AppButton.vue';
+import AuthSection from '../shared/AuthSection.vue';
+import LoginContainer from '../login/LoginContainer.vue';
+import { useRouter } from 'vue-router';
+import store from '../../store';
 
 const router = useRouter();
 
 const $toast = useToast();
 const formData = reactive({
-  email: "",
-  password: "",
-  name: "",
-  confirmPassword: "",
+  email: '',
+  password: '',
+  name: '',
+  confirmPassword: '',
 });
 
 const reset = () => {
-  formData.email = "";
-  formData.name = "";
-  formData.password = "";
-  formData.confirmPassword = "";
+  formData.email = '';
+  formData.name = '';
+  formData.password = '';
+  formData.confirmPassword = '';
 };
 const rules = computed(() => {
   return {
@@ -102,16 +102,16 @@ const handleSubmit = async () => {
     try {
       loading.value = true;
 
-      await store.dispatch("auth/registration", { email, name, password });
-      router.push({ name: "home" });
+      await store.dispatch('auth/registration', { email, name, password });
+      router.push({ name: 'home' });
       reset();
     } catch (error) {
       console.log(error);
 
       $toast.open({
         message: error,
-        type: "error",
-        position: "top-right",
+        type: 'error',
+        position: 'top-right',
       });
     } finally {
       loading.value = false;

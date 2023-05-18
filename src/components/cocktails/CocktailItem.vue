@@ -11,14 +11,18 @@
       />
       <div class="cocktail__info">
         <p>{{ cocktail.strAlcoholic }}</p>
-        <p class="ingredients">Ingredients:</p>
+        <StarRating
+              :rating="cocktail.averageRating"
+              
+            />
+        <!-- <p class="ingredients">Ingredients:</p>
         <ul class="ingredients__list">
           <template v-for="(el, idx) of new Array(15)" :key="idx">
             <li v-if="cocktail[`strIngredient${idx + 1}`]">
               {{ idx + 1 }}. {{ cocktail[`strIngredient${idx + 1}`] }}
             </li>
           </template>
-        </ul>
+        </ul> -->
       </div>
     </div>
 
@@ -27,17 +31,27 @@
 </template>
 
 <script setup>
+import StarRating from '../StarRating.vue';
+import { ref, onMounted } from "vue";
+import { getCocktailById, getAverageRating } from "@/services/cocktails-api";
+
 const props = defineProps({
   cocktail: {
     required: true,
     type: Object,
   },
 });
+const ratings = ref(0);
+// const votes = ref(0);
+// const ratingKey = ref(1);
+
+
 </script>
 
 <style lang="scss" scoped>
 @import "../../assets/scss";
 .cocktail {
+
   color: $text-color;
   max-width: 320px;
   display: flex;
@@ -64,6 +78,7 @@ const props = defineProps({
     height: auto;
     overflow: hidden;
     border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
   }
 
   &__info {

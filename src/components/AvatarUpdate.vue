@@ -98,7 +98,7 @@ const sendPhoto = async () => {
 <style lang="scss" scoped>
 .form {
   width: 80%;
-  background-color: #ffa07a;
+  background-color: #0c7cbd;
 }
 .avatar {
   position: relative;

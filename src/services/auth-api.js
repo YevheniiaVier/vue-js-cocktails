@@ -1,4 +1,5 @@
 import axios from "axios";
+import { instance } from './cocktails-api';
 
 const authInstance = axios.create({
   baseURL: "https://cocktails-backend.onrender.com/api/",
@@ -6,9 +7,13 @@ const authInstance = axios.create({
 
 export const setAuthHeader = (token) => {
   authInstance.defaults.headers.common.Authorization = `Bearer ${token}`;
+  instance.defaults.headers.common.Authorization = `Bearer ${token}`;
+
 };
 export const clearAuthHeader = () => {
   authInstance.defaults.headers.common.Authorization = "";
+  instance.defaults.headers.common.Authorization = "";
+
 };
 
 export const loginUser = async (user) => {

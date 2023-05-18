@@ -6,10 +6,13 @@ const LoginView = () => import("../views/LoginView.vue");
 const HomeView = () => import("../views/HomeView.vue");
 const ErrorView = () => import("../views/ErrorView.vue");
 const CocktailsByNameView = () => import("../views/CocktailsByNameView.vue");
-const FavoriteCocktailsView = () =>
-  import("../views/FavoriteCocktailsView.vue");
+const MyPageView = () =>
+  import("../views/MyPageView.vue");
 const CocktailItemView = () => import("../views/CocktailItemView.vue");
 const RegisterView = () => import("../views/RegisterView.vue");
+const FavoriteView = () => import("../views/FavoritView.vue");
+const MyDrinksView = () => import("../views/MyDrinksView.vue");
+const AddDrinkView = () => import("../views/AddDrinkView.vue");
 
 import store from "../store";
 
@@ -34,9 +37,24 @@ const router = createRouter({
           },
         },
         {
-          path: "/favorite",
-          name: "favorite",
-          component: FavoriteCocktailsView,
+          path: "/my-page",
+          name: "my-page",
+          component: MyPageView,
+          children: [  {
+            path: "/favorites",
+            name: "favorites",
+            component: FavoriteView,
+          },
+          {
+            path: "/my-drinks",
+            name: "my-drinks",
+            component: MyDrinksView,
+          },
+          {
+            path: "/add-drink",
+            name: "add-drink",
+            component: AddDrinkView,
+          },]
         },
 
         {

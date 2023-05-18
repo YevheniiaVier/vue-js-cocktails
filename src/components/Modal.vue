@@ -114,16 +114,16 @@ watch(
     left: 50%;
     transform: translate(-50%, -50%);
     min-height: 380px;
-    max-height: 600px;
+    max-height: 80%;
     max-width: 600px;
     width: 80%;
     width: 100%;
 
     background-image: linear-gradient(
       -225deg,
-      rgb(167, 141, 155, 0.9) 50%,
+      rgba(17, 25, 54, 0.9) 50%,
 
-      #e3fdf5 50%
+      #bae3e5 50%
     );
     @media screen and (min-height: 10px) and (max-height: 450px) {
       top: 300px;
