@@ -4,6 +4,10 @@
       <GoBackButton @click="goBack" />
       <div class="cocktail__main">
         <div class="cocktail__info">
+          <FavoriteButton
+            :isFavorite="isFavorite"
+            @toggle-favorite="toggleFavorite"
+          />
           <h2 class="cocktail__title">{{ cocktail.strDrink }}</h2>
           <img
             class="cocktail__img"
@@ -44,7 +48,7 @@
                   :alt="cocktail[`strIngredient${idx + 1}`]"
                 />
                 {{ cocktail[`strIngredient${idx + 1}`] }} :
-                {{ cocktail[`strMeasure${idx + 1}`] || "some" }}
+                {{ cocktail[`strMeasure${idx + 1}`] || 'some' }}
               </li>
             </template>
           </ul>
@@ -71,19 +75,21 @@
 </template>
 
 <script setup>
-import { useRoute } from "vue-router";
-import { useStore } from "vuex";
-import { ref, onMounted, computed, watch } from "vue";
-import { useRouter } from "vue-router";
-import { getCocktailById, getAverageRating } from "@/services/cocktails-api";
-import Modal from "../components/Modal.vue";
-import AddRating from "../components/AddRating.vue";
-import AppContainer from "@/components/shared/AppContainer.vue";
-import GoBackButton from "../components/shared/GoBackButton.vue";
-import StarRating from "../components/StarRating.vue";
+import { useRoute } from 'vue-router';
+import { useStore } from 'vuex';
+import { ref, onMounted, computed, watch } from 'vue';
+import { useRouter } from 'vue-router';
+import { getCocktailById, getAverageRating } from '@/services/cocktails-api';
+import Modal from '../components/Modal.vue';
+import AddRating from '../components/AddRating.vue';
+import AppContainer from '@/components/shared/AppContainer.vue';
+import GoBackButton from '../components/shared/GoBackButton.vue';
+import StarRating from '../components/StarRating.vue';
+import { toggleFavoriteCocktail } from '../services/cocktails-api';
 
-import { useToast } from "vue-toast-notification";
-import "vue-toast-notification/dist/theme-sugar.css";
+import { useToast } from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
+import FavoriteButton from '../components/FavoriteButton.vue';
 
 const route = useRoute();
 const cocktail = ref({});
@@ -91,49 +97,70 @@ const router = useRouter();
 const $toast = useToast();
 const store = useStore();
 
-const isLoggedIn = store.getters["auth/isLoggedIn"];
+const isLoggedIn = store.getters['auth/isLoggedIn'];
 
 const modalActive = ref(false);
 
 const ratings = ref(0);
 const votes = ref(0);
 const ratingKey = ref(1);
+
+const isFavorite = ref(false);
+const cocktailId = route.params.id;
+const user = computed(() => {
+  return store.getters['auth/getUser'];
+});
+
 onMounted(async () => {
-  const cocktailId = route.params.id;
   const result = await getCocktailById(cocktailId);
   cocktail.value = { ...result } || {};
 
   const { averageRating, totalVotes } = await getAverageRating(cocktailId);
-  ratings.value = averageRating;
+   ratings.value = averageRating;
   votes.value = totalVotes;
 });
-const updateRating = ({ avgRating, totalVotes }) => {
-  ratings.value = avgRating;
+
+const updateRating = async () => {
+  const { averageRating, totalVotes } = await getAverageRating(cocktailId);
+   ratings.value = averageRating;
   votes.value = totalVotes;
+ 
+
+
 };
 
 const goBack = () => {
-  window.history.length > 1 ? router.go(-1) : router.push("/");
+  window.history.length > 1 ? router.go(-1) : router.push('/');
 };
 
 const toggleModal = () => {
-  console.log(isLoggedIn);
   if (!isLoggedIn) {
     return $toast.open({
-      message: "Please log in to add value to the drink",
-      type: "warning",
-      position: "top-right",
+      message: 'Please log in to add value to the drink',
+      type: 'warning',
+      position: 'top-right',
     });
   }
   modalActive.value = !modalActive.value;
 };
-watch(ratings, (newRating, oldRating) => {
-  ratingKey.value += 1;
+
+
+watch([() => user.value.favorite, () => cocktail.value._id], () => {
+  isFavorite.value = user.value.favorite?.includes(cocktail.value._id) ? true : false;
 });
+
+
+const toggleFavorite = async () => {
+  try {
+    await store.dispatch("auth/toggleFavoriteList", cocktail.value._id);
+  } catch {
+    console.log(error);
+  }
+};
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/scss";
+@import '../assets/scss';
 
 .cocktail {
   &__main {

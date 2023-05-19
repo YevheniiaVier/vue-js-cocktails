@@ -6,8 +6,9 @@ import {
   setAuthHeader,
   clearAuthHeader,
   updateAvatar,
-} from "../../services/auth-api";
+  } from "../../services/auth-api";
 
+  import {toggleFavoriteCocktail} from '../../services/cocktails-api'
 import store from "../../store";
 
 export const login = async ({ commit }, payload) => {
@@ -55,6 +56,18 @@ export const changeAvatar = async ({ commit }, payload) => {
     const { avatarURL, message } = await updateAvatar(payload);
     commit("setNewAvatar", avatarURL);
     return message;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const toggleFavoriteList = async ({ commit }, payload) => {
+  try {
+    const { updatedUser} = await toggleFavoriteCocktail(payload);
+    commit("setUserData", updatedUser
+    );
+ 
   } catch (error) {
     console.log(error);
     throw error;

@@ -4,6 +4,10 @@
     :to="{ name: 'cocktail', params: { id: cocktail._id } }"
   >
     <div class="cocktail__wrapper">
+      <div v-if="user.favorite">
+        <Icon v-if="isFavorite" icon="mdi:cards-heart" color="#c61212" />
+        <Icon v-else icon="mdi:cards-heart-outline" color="#c61212" />
+      </div>
       <img
         class="cocktail__img"
         :src="cocktail.strDrinkThumb"
@@ -11,10 +15,7 @@
       />
       <div class="cocktail__info">
         <p>{{ cocktail.strAlcoholic }}</p>
-        <StarRating
-              :rating="cocktail.averageRating"
-              
-            />
+        <StarRating :rating="cocktail.averageRating" />
         <!-- <p class="ingredients">Ingredients:</p>
         <ul class="ingredients__list">
           <template v-for="(el, idx) of new Array(15)" :key="idx">
@@ -31,9 +32,13 @@
 </template>
 
 <script setup>
+import { Icon } from '@iconify/vue';
 import StarRating from '../StarRating.vue';
-import { ref, onMounted } from "vue";
-import { getCocktailById, getAverageRating } from "@/services/cocktails-api";
+import { ref, computed, onMounted } from 'vue';
+import { useStore } from 'vuex';
+
+// import { getCocktailById, getAverageRating } from "@/services/cocktails-api";
+const store = useStore();
 
 const props = defineProps({
   cocktail: {
@@ -41,17 +46,26 @@ const props = defineProps({
     type: Object,
   },
 });
-const ratings = ref(0);
+// const ratings = ref(0);
 // const votes = ref(0);
 // const ratingKey = ref(1);
 
+const user = computed(() => {
+  return store.getters['auth/getUser'];
+});
 
+const isFavorite = computed(() => {
+  if (!user.value.favorite) {
+    return;
+  }
+
+  return user.value.favorite.includes(props.cocktail._id);
+});
 </script>
 
 <style lang="scss" scoped>
-@import "../../assets/scss";
+@import '../../assets/scss';
 .cocktail {
-
   color: $text-color;
   max-width: 320px;
   display: flex;

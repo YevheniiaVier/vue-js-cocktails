@@ -36,7 +36,8 @@ export const getUser = async (token) => {
   try {
     setAuthHeader(token);
     const { data } = await authInstance.get("/user/current");
-    return data;
+    return data.user;
+  
   } catch (error) {
     console.log(error);
     clearAuthHeader();

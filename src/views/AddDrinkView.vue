@@ -3,15 +3,17 @@
     <!-- <p v-if="ingredients.length">{{ingredients}}</p> -->
     <AppForm @submit="handleSubmit">
       <AppInput
-        :required="true"
         class="required-field"
         id="strDrink"
         label="Drink Name *"
         v-model="formData.strDrink"
-        required
       />
+      <span
+          v-for="error in v$.strDrink.$errors"
+          :key="error.$uid"
+          class="error__red"
+          >{{ error.$message }}</span>
       <AppInput
-        :required="true"
         class="required-field"
         @change="onFileChange"
         type="file"
@@ -19,6 +21,11 @@
         label="Drink photo *"
         v-model="formData.strDrinkThumb"
       />
+      <span
+          v-for="error in v$.strDrinkThumb.$errors"
+          :key="error.$uid"
+          class="error__red"
+          >{{ error.$message }}</span>
       <AppInput id="strTags" label="Tags" v-model="formData.strTags" />
       <AppInput
         id="strVideo"
@@ -26,7 +33,6 @@
         v-model="formData.strVideo"
       />
       <AppSelect
-        :required="true"
         class="required-field"
         @select="onSelect('strCategory', $event)"
         id="strCategory"
@@ -34,8 +40,12 @@
         :items="categorySelectItems"
         v-model="formData.strCategory"
       />
+      <span
+          v-for="error in v$.strCategory.$errors"
+          :key="error.$uid"
+          class="error__red"
+          >{{ error.$message }}</span>
       <AppSelect
-        :required="true"
         class="required-field"
         @select="onSelect('strAlcoholic', $event)"
         id="strAlcoholic"
@@ -43,10 +53,15 @@
         :items="typeSelectItems"
         v-model="formData.strAlcoholic"
       />
+      <span
+          v-for="error in v$.strAlcoholic.$errors"
+          :key="error.$uid"
+          class="error__red"
+          >{{ error.$message }}</span>
+
       <AppInput id="strGlass" label="Glass" v-model="formData.strGlass" />
       <label for="strInstructions">Write instructions</label>
       <textarea
-        :required="true"
         class="required-field"
         id="strInstructions"
         label="Instructions"
@@ -55,6 +70,11 @@
         v-model="formData.strInstructions"
       >
       </textarea>
+      <span
+          v-for="error in v$.strInstructions.$errors"
+          :key="error.$uid"
+          class="error__red"
+          >{{ error.$message }}</span>
 
       <!-- <AppInput
         id="strInstructionsES"
@@ -313,6 +333,7 @@ const rules = computed(() => {
     strCategory: { required },
     strAlcoholic: { required },
     strInstructions: { required },
+    strDrinkThumb: { required },
   };
 });
 const v$ = useVuelidate(rules, formData);
@@ -321,7 +342,7 @@ const handleSubmit = async () => {
   console.log(formData, 'formData');
 
   const isFormValid = await v$.value.$validate();
-  console.log(isFormValid, 'isFormValid');
+
   if (!isFormValid) {
     $toast.open({
       message: 'Please fill all required fields',
@@ -364,14 +385,14 @@ const handleSubmit = async () => {
 //     border-color: $accent-color;
 //   }
 // }
-.required-field {
-  border-color: red;
-}
-.required-field .label::after {
-  content: '*';
+.error__red {
   color: red;
-  margin-left: 4px;
 }
+// .required-field .label::after {
+//   content: '*';
+//   color: red;
+//   margin-left: 4px;
+// }
 // .simple-typeahead > input {
 //   background-color: red;
 // }

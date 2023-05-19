@@ -47,6 +47,12 @@ export const getFavoriteCocktails = async () => {
   return data;
 };
 
+export const toggleFavoriteCocktail = async (drinkId) => {
+  const { data } = await instance.post(`drinks/favorite/${drinkId}`);
+  return data;
+};
+
+
 export const getMyCocktails = async () => {
   const { data } = await instance.get("drinks/my-drinks");
   return data;

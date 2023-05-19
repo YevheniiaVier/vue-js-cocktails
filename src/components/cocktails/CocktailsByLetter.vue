@@ -5,7 +5,7 @@
 </template>
 <script setup>
 import { useRoute } from "vue-router";
-import { onMounted, watch, computed } from "vue";
+import { onMounted, computed } from "vue";
 const route = useRoute();
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 // const cocktails = computed(() => store.state.mealsByLetter);

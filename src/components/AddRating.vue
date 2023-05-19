@@ -30,7 +30,7 @@
 
 <script setup>
 import { addRating, getAverageRating } from "@/services/cocktails-api";
-import { ref, computed, onMounted } from "vue";
+import { ref } from "vue";
 // import { useToast } from "vue-toast-notification";
 // import "vue-toast-notification/dist/theme-sugar.css";
 const rating = ref(1);
@@ -53,8 +53,8 @@ const onChange = (e) => {
 const onSubmit = async () => {
   try {
     await addRating(props.drinkId, rating.value);
-    const { avgRating, totalVotes } = await getAverageRating(props.drinkId);
-    emit("update-rating", { avgRating, totalVotes });
+    // const { avgRating, totalVotes } = await getAverageRating(props.drinkId);
+    emit("update-rating");
   } catch (error) {
     console.log(error);
   }
