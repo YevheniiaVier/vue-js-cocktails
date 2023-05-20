@@ -2,76 +2,86 @@
   <section class="cocktail">
     <AppContainer>
       <GoBackButton @click="goBack" />
-      <div class="cocktail__main">
-        <div class="cocktail__info">
-          <FavoriteButton
-            :isFavorite="isFavorite"
-            @toggle-favorite="toggleFavorite"
-          />
-          <div v-if="isMyDrink" class="drink__action">
-            <button @click="onEditDrink" class="action__button">
-              <Icon class="icon" icon="typcn:edit" />
-            </button>
-            <button @click="onDeleteDrink" class="action__button">
-              <Icon class="icon" icon="material-symbols:delete" />
-            </button>
+      <CircleLoader v-if="isLoading" />
+      <div v-else>
+        <div class="cocktail__main">
+          <div class="cocktail__info">
+            <h2 class="cocktail__title">{{ cocktail.strDrink }}</h2>
+            <div class="img_wrapper">
+              <div v-if="isMyDrink" class="drink__action">
+                <button @click="onEditDrink" class="action__button">
+                  <Icon class="icon" icon="typcn:edit" />
+                </button>
+                <button @click="onDeleteDrink" class="action__button">
+                  <Icon class="icon" icon="material-symbols:delete" />
+                </button>
+              </div>
+              <FavoriteButton
+                v-if="user.favorite"
+                :isFavorite="isFavorite"
+                @toggle-favorite="toggleFavorite"
+              />
+              <img
+                class="cocktail__img"
+                :src="cocktail.strDrinkThumb"
+                :alt="cocktail.strDrink"
+              />
+            </div>
+
+            <div class="rating__tags">
+              <StarRating
+                @click="toggleModal"
+                :rating="ratings"
+                :key="ratingKey"
+              />
+              <p>Total votes: {{ votes }}</p>
+              <p v-if="cocktail.strTags" class="tags__names">
+                {{ cocktail.strTags }}
+              </p>
+            </div>
+            <div class="cocktail__type">
+              <p>Type: {{ cocktail.strAlcoholic }}</p>
+              <p>Category: {{ cocktail.strCategory }}</p>
+            </div>
           </div>
-          <h2 class="cocktail__title">{{ cocktail.strDrink }}</h2>
-          <img
-            class="cocktail__img"
-            :src="cocktail.strDrinkThumb"
-            :alt="cocktail.strDrink"
-          />
-          <div class="rating__tags">
-            <StarRating
-              @click="toggleModal"
-              :rating="ratings"
-              :key="ratingKey"
-            />
-            <p>Total votes: {{ votes }}</p>
-            <p v-if="cocktail.strTags" class="tags__names">
-              {{ cocktail.strTags }}
-            </p>
-          </div>
-          <div class="cocktail__type">
-            <p>Type: {{ cocktail.strAlcoholic }}</p>
-            <p>Category: {{ cocktail.strCategory }}</p>
+
+          <div class="cocktail__ingredients ingredients">
+            <!-- <h2 class="ingredients__title">Ingredients</h2> -->
+
+            <ul class="ingredients__list">
+              <template v-for="(el, idx) of new Array(15)" :key="idx">
+                <li
+                  class="ingredients__item"
+                  v-if="cocktail[`strIngredient${idx + 1}`]"
+                >
+                  <img
+                    class="ingredients__img"
+                    :src="`https://www.thecocktaildb.com/images/ingredients/${
+                      cocktail[`strIngredient${idx + 1}`]
+                    }.png`"
+                    :alt="cocktail[`strIngredient${idx + 1}`]"
+                  />
+                  {{ cocktail[`strIngredient${idx + 1}`] }} :
+                  {{ cocktail[`strMeasure${idx + 1}`] || 'some' }}
+                </li>
+              </template>
+            </ul>
           </div>
         </div>
 
-        <div class="cocktail__ingredients ingredients">
-          <h2 class="ingredients__title">Ingredients</h2>
-
-          <ul class="ingredients__list">
-            <template v-for="(el, idx) of new Array(15)" :key="idx">
-              <li
-                class="ingredients__item"
-                v-if="cocktail[`strIngredient${idx + 1}`]"
-              >
-                <img
-                  class="ingredients__img"
-                  :src="`https://www.thecocktaildb.com/images/ingredients/${
-                    cocktail[`strIngredient${idx + 1}`]
-                  }.png`"
-                  :alt="cocktail[`strIngredient${idx + 1}`]"
-                />
-                {{ cocktail[`strIngredient${idx + 1}`] }} :
-                {{ cocktail[`strMeasure${idx + 1}`] || 'some' }}
-              </li>
-            </template>
-          </ul>
-        </div>
+        <h2 class="cocktail__instructions instructions">Instructions</h2>
+        <p class="instructions__langs">choose the language</p>
+        <p class="instructions__text">{{ cocktail.strInstructions }}</p>
+        <h2 v-if="cocktail.strGlass" class="cocktail__glass glass">Glass</h2>
+        <p v-if="cocktail.strGlass" class="glass__text">
+          Serve: {{ cocktail.strGlass }}
+        </p>
       </div>
 
-      <h2 class="cocktail__instructions instructions">Instructions</h2>
-      <p class="instructions__langs">choose the language</p>
-      <p class="instructions__text">{{ cocktail.strInstructions }}</p>
-      <h2 class="cocktail__glass glass">Glass</h2>
-      <p class="glass__text">Serve: {{ cocktail.strGlass }}</p>
       <Teleport to="#modal">
         <Modal @close="toggleModal" :modalActive="modalActive">
-          <h1>this is Modal</h1>
           <AddRating
+            class="rating__modal"
             @update-rating="updateRating"
             @close="toggleModal"
             :drinkId="cocktail._id"
@@ -88,6 +98,7 @@ import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 import { ref, onMounted, computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
+import CircleLoader from '../components/loaders/CircleLoader.vue';
 import {
   getCocktailById,
   getAverageRating,
@@ -118,6 +129,7 @@ const votes = ref(0);
 const ratingKey = ref(1);
 const isFavorite = ref(false);
 const isMyDrink = ref(null);
+const isLoading = ref(false);
 
 const cocktailId = route.params.id;
 
@@ -126,13 +138,20 @@ const user = computed(() => {
 });
 
 onMounted(async () => {
-  const result = await getCocktailById(cocktailId);
-  cocktail.value = { ...result } || {};
+  try {
+    isLoading.value = true;
+    const result = await getCocktailById(cocktailId);
+    cocktail.value = { ...result } || {};
 
-  isMyDrink.value = cocktail.value.owner === user.value._id;
-  const { averageRating, totalVotes } = await getAverageRating(cocktailId);
-  ratings.value = averageRating;
-  votes.value = totalVotes;
+    isMyDrink.value = cocktail.value.owner === user.value._id;
+    const { averageRating, totalVotes } = await getAverageRating(cocktailId);
+    ratings.value = averageRating;
+    votes.value = totalVotes;
+  } catch (error) {
+    console.log(error);
+  } finally {
+    isLoading.value = false;
+  }
 });
 const onEditDrink = async () => {
   const id = cocktail.value._id;
@@ -329,4 +348,11 @@ const toggleFavorite = async () => {
     color: $main-color;
   }
 }
+.img_wrapper {
+  position: relative;
+}
+// .rating__modal {
+//   background-color: #fff;
+//   color: $main-color;
+// }
 </style>

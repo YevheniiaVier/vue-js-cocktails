@@ -12,7 +12,10 @@
       v-else
       :cocktails="filteredCocktails || []"
     />
+  <AppLetters/>
+
   </AppContainer>
+  
 </template>
 <script setup>
 import { ref, computed } from "vue";
@@ -27,6 +30,8 @@ import CocktailsFilterForm from "@/components/cocktails/CocktailsFilterForm.vue"
 import AppContainer from "@/components/shared/AppContainer.vue";
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
+
+import AppLetters from '../components/shared/AppLetters.vue';
 const searchedCocktails = computed(() => {
   return store.getters["cocktails/getSearchedCocktails"];
 });

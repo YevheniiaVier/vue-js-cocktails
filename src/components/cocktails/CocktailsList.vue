@@ -1,5 +1,5 @@
 <template>
-  <ul class="cocktails__list">
+  <ul ref="ref" class="cocktails__list">
     <CocktailItem
       :cocktail="cocktail"
       v-for="cocktail in props.cocktails"
@@ -15,6 +15,10 @@ const props = defineProps({
   cocktails: {
     required: true,
     type: Object,
+  },
+  ref: {
+    required: true,
+    type: String,
   },
 });
 </script>

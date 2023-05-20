@@ -13,6 +13,8 @@ const FavoriteView = () => import('../views/FavoritView.vue');
 const MyDrinksView = () => import('../views/MyDrinksView.vue');
 const AddDrinkView = () => import('../views/AddDrinkView.vue');
 const EditDrinkView = () => import('../views/EditDrinkView.vue');
+const CocktailsByLetterView = () =>
+  import('../views/CocktailsByLetterView.vue');
 
 import store from '../store';
 
@@ -37,9 +39,20 @@ const router = createRouter({
           },
         },
         {
+          path: '/by-letter/:letter',
+          name: 'by-letter',
+          component: CocktailsByLetterView,
+          meta: {
+            requiresAuth: true,
+          },
+        },
+        {
           path: '/my-page',
           name: 'my-page',
           component: MyPageView,
+          meta: {
+            requiresAuth: true,
+          },
           redirect: '/my-drinks',
           children: [
             {

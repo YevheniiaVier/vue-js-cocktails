@@ -6,9 +6,9 @@ export function setSearchedCocktails(state, data) {
   }
 }
 
-// export function setCocktailsByLetter(state, data) {
-//   state.searchedCocktails = [...data];
-// }
+export function setCocktailsByLetter(state, data) {
+  state.cocktailsByLetter = [...data];
+}
 
 // export function setCocktailsByIngredient(state, data) {
 //   state.searchedCocktails = [...data];

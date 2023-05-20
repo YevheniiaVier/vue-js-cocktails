@@ -4,7 +4,7 @@ import * as mutations from "./mutations";
 
 const initialState = {
   searchedCocktails: [],
-  // cocktailsByLetter: [],
+  cocktailsByLetter: [],
   // cocktailsByIngredient: [],
   ingredients: [],
   ingredientsList:[],

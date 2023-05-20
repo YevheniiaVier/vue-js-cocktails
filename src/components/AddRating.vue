@@ -2,14 +2,11 @@
   <section class="rating">
     <div class="logo">
       <img src="/star-filled.svg" alt="star" />
-    </div>
-
-    <div class="intro">
       <h1>How do you like this drink?</h1>
     </div>
 
     <form name="select-rating" class="select-rating" @submit.prevent="onSubmit">
-      <fieldset>
+      <fieldset class="fields">
         <div v-for="value in values" :key="value" class="form-group">
           <input
             @change="onChange"
@@ -23,18 +20,19 @@
         </div>
       </fieldset>
 
-      <button type="submit" title="submit review">Submit</button>
+      <button class="rating__btn" type="submit" title="submit review">
+        Add value
+      </button>
     </form>
   </section>
 </template>
 
 <script setup>
-import { addRating, getAverageRating } from "@/services/cocktails-api";
-import { ref } from "vue";
-// import { useToast } from "vue-toast-notification";
-// import "vue-toast-notification/dist/theme-sugar.css";
+import { addRating, getAverageRating } from '@/services/cocktails-api';
+import { ref } from 'vue';
+
 const rating = ref(1);
-const emit = defineEmits(["close", "update-rating"]);
+const emit = defineEmits(['close', 'update-rating']);
 
 const props = defineProps({
   values: {
@@ -46,20 +44,51 @@ const props = defineProps({
     required: true,
   },
 });
-// const $toast = useToast();
-const onChange = (e) => {
+
+const onChange = e => {
   rating.value = e.target.value;
 };
 const onSubmit = async () => {
   try {
     await addRating(props.drinkId, rating.value);
-    // const { avgRating, totalVotes } = await getAverageRating(props.drinkId);
-    emit("update-rating");
+    emit('update-rating');
   } catch (error) {
     console.log(error);
   }
-  emit("close");
+  emit('close');
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@import '../assets/scss';
+.rating {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff5f;
+  width: 70%;
+  align-items: center;
+}
+.logo {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.select-rating {
+  text-align: center;
+}
+.rating__btn {
+  margin-top: 15px;
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.fields {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>

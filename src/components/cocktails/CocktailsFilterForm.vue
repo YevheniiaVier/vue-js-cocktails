@@ -14,7 +14,7 @@
       v-model="formData.searchInput"
     />
     <AppButton :loading="loading" type="submit" variant="primary" size="large"
-      >SubmiTTT</AppButton
+      >Search</AppButton
     >
   </AppForm>
 </template>

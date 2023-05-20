@@ -310,7 +310,6 @@ const handleEscapeKey = () => {
 const choosePhoto = photo => {
   // file.value = event.target.files[0];
   file.value = photo;
-  console.log(file.value, 'file');
   modalActive.value = false;
 };
 onMounted(async () => {
@@ -450,8 +449,6 @@ const rules = computed(() => {
 const v$ = useVuelidate(rules, formData);
 
 const handleSubmit = async () => {
-  console.log(formData, 'formData');
-  console.log(file.value, 'file.balue');
 const photo = file.value ? file.value : null;
 
   const isFormValid = await v$.value.$validate();
