@@ -22,6 +22,35 @@ export const addCocktail = async (cocktail, file) => {
   return data;
 };
 
+export const updateCocktailInfo = async (id, drink, file) => {
+  const formData = new FormData();
+  for (const key in drink) {
+    formData.append(key, drink[key]);
+  }
+  if(file) {
+    formData.append("image", file);
+  }
+    const { data } = await instance.put(`drinks/drink/${id}`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return data;
+};
+// export const updateImage = async (file) => {
+//   const formData = new FormData();
+//   formData.append("image", file);
+
+//   const { data } = await instance.patch(`drinks/drink/${id}/images`, formData, {
+//     headers: { "Content-Type": "multipart/form-data" },
+//   });
+//   return data;
+// };
+
+
+export const removeDrink = async (cocktailId) => {
+  const  drink  = await instance.delete(`drinks/drink/${cocktailId}`);
+  return drink;
+}
+
 export const getCocktailById = async (cocktailId) => {
   const { data } = await instance.get(`drinks/drink/${cocktailId}`);
   return data;

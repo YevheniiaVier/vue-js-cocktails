@@ -1,7 +1,7 @@
 <template>
   <button type="button" @click="onClick" class="heart__wrapper">
-    <Icon v-if="isFavorite" icon="mdi:cards-heart" color="#c61212" />
-    <Icon v-else icon="mdi:cards-heart-outline" color="#c61212" />
+    <Icon v-if="isFavorite" class="heart" icon="mdi:cards-heart"/>
+    <Icon v-else  class="heart" icon="mdi:cards-heart-outline"  />
   </button>
 </template>
 
@@ -19,7 +19,24 @@ const onClick = () => {
 </script>
 
 <style lang="scss" scoped>
-.star {
+@import '../assets/scss';
+.heart__wrapper {
+  padding: 0;
+  position: absolute;
+  top: -5px;
+  right: 0;
+cursor: pointer;
+background-color: transparent;
+// box-shadow: none;
+border: none;
+}
+.heart {
   color: rgb(198, 18, 18);
+  @include transition(color);
+  width: 60px;
+  height: 60px;
+  &:hover {
+    color: red;
+  }
 }
 </style>

@@ -59,9 +59,7 @@ const emit = defineEmits(["upload", "onFileChoose"]);
 
 
 const uploadPhoto = async () => {
- 
-
-  await sendPhoto();
+   await sendPhoto();
   emit("upload");
   previewImage.value = null;
 };

@@ -28,3 +28,8 @@ export const getListIngredients = async ({ commit }) => {
   const { ingredients } = await api.getListOfIngredients();
   commit("setIngredientsList", ingredients);
 };
+
+// export const deleteCocktail = async ({ commit }, payload) => {
+//   const  drink  = await api.removeDrink(payload);
+//   commit("setIngredientsList", ingredients);
+// };
