@@ -6,6 +6,7 @@
       :key="cocktail._id"
     />
   </ul>
+  <GoUpButton />
   <p v-if="showMessage" class="message">There are no more drinks</p>
 </template>
 
@@ -13,6 +14,7 @@
 import { watch, ref, defineProps, computed, onMounted, onUnmounted } from 'vue';
 import CocktailItem from './CocktailItem.vue';
 import { useRoute } from 'vue-router';
+import GoUpButton from '../shared/GoUpButton.vue';
 
 const scrollEl = ref(null);
 const page = ref(1);
@@ -32,7 +34,11 @@ const props = defineProps({
   },
 });
 onMounted(async () => {
-  if (route.name === 'home') {
+  if (
+    route.name === 'home' ||
+    route.name === 'favorites' ||
+    route.name === 'my-drinks'
+  ) {
     return;
   }
   window.addEventListener('scroll', handleScroll);
@@ -67,29 +73,26 @@ const showMessage = computed(() => {
     return !props.hasMoreData;
   }
 });
-
-watch(showMessage, value => {
-  if (value) {
-    window.removeEventListener('scroll', handleScroll);
-  }
-});
-
-
 </script>
 
 <style lang="scss" scoped>
 .cocktails {
   &__list {
+    position: relative;
     margin-top: 25px;
-    display: grid;
+    /* display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    grid-gap: 25px;
-    justify-items: center;
-    place-items: center;
+    grid-gap: 25px; */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+    justify-content: center;
+    align-items: center;
   }
 }
 .message {
   text-align: center;
   font-size: 25px;
+  margin-top: 30px;
 }
 </style>

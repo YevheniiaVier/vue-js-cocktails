@@ -1,13 +1,12 @@
 import * as api from "../../services/cocktails-api";
 
-export const searchCocktailsByName = async ({ commit }, keyword) => {
-  const { drinks } = await api.searchCocktailByName(keyword);
+export const searchCocktailsByName = async ({ commit }, {query, page}) => {
+  const { drinks } = await api.searchCocktailByName(query, page);
+
   commit("setSearchedCocktails", drinks);
 };
 
 export const searchCocktailsByLetter = async ({ commit }, {letter, page}) => {
-  console.log('letter', letter);
-  console.log('page', page)
   const { drinks } = await api.getCocktailsByLetter(letter, page);
   commit("setCocktailsByLetter", drinks);
 };

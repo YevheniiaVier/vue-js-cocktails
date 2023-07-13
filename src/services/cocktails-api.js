@@ -5,8 +5,8 @@ export const instance = axios.create({
   baseURL: "https://cocktails-backend.onrender.com/api/",
 });
 
-export const searchCocktailByName = async (name) => {
-  const { data } = await instance.get(`drinks/search/${name}`);
+export const searchCocktailByName = async (name, page) => {
+  const { data } = await instance.get(`drinks/search/${name}?page=${page}`);
   return data;
 };
 
