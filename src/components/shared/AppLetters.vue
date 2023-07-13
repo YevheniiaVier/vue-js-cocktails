@@ -13,4 +13,15 @@
 const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@import '../../assets/scss';
+.by__letter {
+  display: flex;
+  justify-content: center;
+  font-size: 20px;
+  color: $accent-color;
+  font-weight: bold;
+  gap: 5px;
+  margin-top: 20px;
+}
+</style>

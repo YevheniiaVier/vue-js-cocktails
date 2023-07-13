@@ -1,5 +1,6 @@
 <template>
-  <RouterLink
+  <li>
+    <RouterLink
     class="cocktail"
     :to="{ name: 'cocktail', params: { id: cocktail._id } }"
   >
@@ -31,6 +32,8 @@
 
     <h2 class="cocktail__title">{{ cocktail.strDrink }}</h2>
   </RouterLink>
+  </li>
+
 </template>
 
 <script setup>
@@ -48,9 +51,7 @@ const props = defineProps({
     type: Object,
   },
 });
-// const ratings = ref(0);
-// const votes = ref(0);
-// const ratingKey = ref(1);
+
 
 const user = computed(() => {
   return store.getters['auth/getUser'];

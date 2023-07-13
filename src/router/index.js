@@ -106,7 +106,7 @@ const router = createRouter({
       },
     },
     {
-      path: '/:catchAll(.*)',
+      path: '/:catchAll(.*)*',
       name: 'error-page',
       component: ErrorView,
     },

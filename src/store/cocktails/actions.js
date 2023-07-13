@@ -5,14 +5,16 @@ export const searchCocktailsByName = async ({ commit }, keyword) => {
   commit("setSearchedCocktails", drinks);
 };
 
-export const searchCocktailsByLetter = async ({ commit }, letter) => {
-  const { drinks } = await api.getCocktailsByLetter(letter);
+export const searchCocktailsByLetter = async ({ commit }, {letter, page}) => {
+  console.log('letter', letter);
+  console.log('page', page)
+  const { drinks } = await api.getCocktailsByLetter(letter, page);
   commit("setCocktailsByLetter", drinks);
 };
 
 export const getRandomCocktails = async ({ commit }) => {
   const { drinks } = await api.getRandomCocktails();
-  commit("setSearchedCocktails", drinks);
+  commit("setRandomCocktails", drinks);
 };
 
 // export const searchIngredients = async ({ commit }, keyword) => {

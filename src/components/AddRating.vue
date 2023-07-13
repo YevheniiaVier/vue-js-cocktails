@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-import { addRating, getAverageRating } from '@/services/cocktails-api';
+import { addRating } from '@/services/cocktails-api';
 import { ref } from 'vue';
 
 const rating = ref(1);

@@ -19,9 +19,7 @@
 </template>
 <script setup>
 import { ref, computed } from "vue";
-// import { useToast } from "vue-toast-notification";
-// import "vue-toast-notification/dist/theme-sugar.css";
-// import { useRouter } from "vue-router";
+
 import { useStore } from "vuex";
 const store = useStore();
 
@@ -32,10 +30,12 @@ import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
 
 import AppLetters from '../components/shared/AppLetters.vue';
+
 const searchedCocktails = computed(() => {
   return store.getters["cocktails/getSearchedCocktails"];
 });
 const $toast = useToast();
+
 const filteredCocktails = computed(() => {
   return store.getters["cocktails/getFilteredCocktails"];
 });

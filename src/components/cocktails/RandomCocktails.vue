@@ -4,14 +4,16 @@ import { useStore } from "vuex";
 import CocktailsList from "./CocktailsList.vue";
 const store = useStore();
 
-const searchedCocktails = computed(() => {
-  return store.getters["cocktails/getSearchedCocktails"];
+const randomCocktails = computed(() => {
+  return store.getters["cocktails/getRandomCocktails"];
 });
 
 async function getCocktails() {
 try {
   await store.dispatch("cocktails/getRandomCocktails");
-  return searchedCocktails;
+
+  return randomCocktails;
+
 } catch (error) {
   console.log(error)
 }
@@ -21,7 +23,7 @@ await getCocktails();
 
 <template>
   <section>
-    <CocktailsList :cocktails="searchedCocktails" />
+    <CocktailsList :cocktails="randomCocktails" />
   </section>
 </template>
 <style lang="scss" scoped></style>

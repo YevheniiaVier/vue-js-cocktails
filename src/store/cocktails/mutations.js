@@ -6,8 +6,16 @@ export function setSearchedCocktails(state, data) {
   }
 }
 
-export function setCocktailsByLetter(state, data) {
-  state.cocktailsByLetter = [...data];
+export function setRandomCocktails(state, data) {
+  if (!data) {
+    state.randomCocktails = [];
+  } else {
+    state.randomCocktails = [...data];
+  }
+}
+
+export function setCocktailsByLetter(state, drinks) {
+  state.cocktailsByLetter = [...drinks];
 }
 
 // export function setCocktailsByIngredient(state, data) {

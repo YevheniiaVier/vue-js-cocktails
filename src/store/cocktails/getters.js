@@ -4,6 +4,10 @@ export const getSearchedCocktails = ({ searchedCocktails }) => {
   return searchedCocktails;
 };
 
+
+export const getRandomCocktails = ({ randomCocktails }) => {
+  return randomCocktails;
+};
 export const getFilteredCocktails = (
   { searchedCocktails },
   getters,
