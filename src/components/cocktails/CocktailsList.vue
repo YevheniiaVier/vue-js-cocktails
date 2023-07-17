@@ -6,7 +6,7 @@
       :key="cocktail._id"
     />
   </ul>
-  <GoUpButton />
+  <GoUpButton v-if="props.cocktails.length > 1"/>
   <p v-if="showMessage" class="message">There are no more drinks</p>
 </template>
 
@@ -35,9 +35,7 @@ const props = defineProps({
 });
 onMounted(async () => {
   if (
-    route.name === 'home' ||
-    route.name === 'favorites' ||
-    route.name === 'my-drinks'
+    props.cocktails.length <= 1
   ) {
     return;
   }

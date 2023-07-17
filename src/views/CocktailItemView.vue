@@ -1,7 +1,7 @@
 <template>
   <section class="cocktail">
     <AppContainer>
-      <GoBackButton @click="goBack" />
+      <GoBackButton @go-back="goBack" />
       <CircleLoader v-if="isLoading" />
       <div v-else>
         <div class="cocktail__main">
@@ -351,8 +351,5 @@ const toggleFavorite = async () => {
 .img_wrapper {
   position: relative;
 }
-// .rating__modal {
-//   background-color: #fff;
-//   color: $main-color;
-// }
+
 </style>

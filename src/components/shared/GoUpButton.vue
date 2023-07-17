@@ -8,21 +8,22 @@
 import { Icon } from '@iconify/vue';
 import { ref } from 'vue';
 
-const btn = ref(null)
+const btn = ref(null);
 
 const goUp = () => {
   window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
 };
-window.onscroll = function() {scrollFunction()};
+window.onscroll = function () {
+  scrollFunction();
+};
 
 function scrollFunction() {
-  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-    btn.value.style.opacity = "1";
-  } else {
-    btn.value.style.opacity = "0";
+  if (btn.value) {
+    document.body.scrollTop > 20 || document.documentElement.scrollTop > 20
+      ? (btn.value.style.opacity = '1')
+      : (btn.value.style.opacity = '0');
   }
 }
-
 </script>
 
 <style lang="scss" scoped>

@@ -1,5 +1,5 @@
 <template>
-  <button :disabled="loading" class="btn" @click="$emit('click')">
+  <button :disabled="loading" class="btn" @click="$emit('go-back')">
     <Icon icon="humbleicons:arrow-go-back" color="#230312" width="15" />
     <span class="btn__content"> Go Back </span>
     <CircleLoader v-if="loading" width="34" height="34" class="btn__loader" />
