@@ -1,7 +1,7 @@
-<template lang="">
+<!-- <template lang="">
   <div></div>
 </template>
 <script>
 export default {};
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped></style> -->

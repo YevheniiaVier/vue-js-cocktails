@@ -69,13 +69,7 @@
           </div>
         </div>
 
-        <h2 class="cocktail__instructions instructions">Instructions</h2>
-        <p class="instructions__langs">choose the language</p>
-        <p class="instructions__text">{{ cocktail.strInstructions }}</p>
-        <h2 v-if="cocktail.strGlass" class="cocktail__glass glass">Glass</h2>
-        <p v-if="cocktail.strGlass" class="glass__text">
-          Serve: {{ cocktail.strGlass }}
-        </p>
+       <CocktailInstructions :cocktail="cocktail"/>
       </div>
 
       <Teleport to="#modal">
@@ -109,7 +103,7 @@ import AddRating from '../components/AddRating.vue';
 import AppContainer from '@/components/shared/AppContainer.vue';
 import GoBackButton from '../components/shared/GoBackButton.vue';
 import StarRating from '../components/StarRating.vue';
-
+import CocktailInstructions from '../components/instructions/CocktailInstructions.vue';
 import { useToast } from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
 import FavoriteButton from '../components/FavoriteButton.vue';
@@ -257,11 +251,11 @@ const toggleFavorite = async () => {
     text-align: center;
   }
 }
-.tags {
+/* .tags {
   &__names {
     color: green;
   }
-}
+} */
 .ingredients {
   &__title {
     font-weight: 600;
@@ -292,37 +286,7 @@ const toggleFavorite = async () => {
   }
 }
 
-.instructions {
-  padding: 20px;
-  margin-bottom: 10px;
-  font-weight: 600;
-  font-size: 25px;
-  text-align: center;
-  &__langs {
-    margin-bottom: 20px;
-    text-align: center;
-  }
 
-  &__text {
-    text-align: center;
-    color: $text-color;
-    font-weight: 600;
-    margin-bottom: 10px;
-  }
-}
-.glass {
-  text-align: center;
-  margin-bottom: 10px;
-
-  &__text {
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 1.16;
-    text-align: center;
-    color: $text-color;
-    font-weight: 600;
-  }
-}
 .drink__action {
   position: absolute;
   top: 0;

@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { watch, ref, defineProps, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import CocktailItem from './CocktailItem.vue';
 import { useRoute } from 'vue-router';
 import GoUpButton from '../shared/GoUpButton.vue';
@@ -78,9 +78,7 @@ const showMessage = computed(() => {
   &__list {
     position: relative;
     margin-top: 25px;
-    /* display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    grid-gap: 25px; */
+
     display: flex;
     flex-wrap: wrap;
     gap: 25px;
