@@ -110,14 +110,17 @@ const isLoading = ref(false);
 
 const cocktailId = route.params.id;
 
-const user = computed(async () => {
-  return await store.getters['auth/getUser'];
+
+const user = computed( () => {
+  return store.getters['auth/getUser'];
 });
 
 onMounted(async () => {
+  
+  isLoading.value = true;
+
   try {
-    isLoading.value = true;
-    const result = await getCocktailById(cocktailId);
+       const result = await getCocktailById(cocktailId);
     cocktail.value = { ...result } || {};
 
     isMyDrink.value = cocktail.value.owner === user.value._id;
@@ -130,6 +133,7 @@ onMounted(async () => {
     isLoading.value = false;
   }
 });
+
 const onEditDrink = async () => {
   const id = cocktail.value._id;
   router.push({ name: 'edit-drink', params: { id } });
@@ -149,6 +153,7 @@ const updateRating = async () => {
   const { averageRating, totalVotes } = await getAverageRating(cocktailId);
   ratings.value = averageRating;
   votes.value = totalVotes;
+  // console.log('user', user.value)
 };
 
 const goBack = () => {
@@ -166,7 +171,7 @@ const toggleModal = () => {
   modalActive.value = !modalActive.value;
 };
 
-watch([() => user.value.favorite, () => cocktail.value._id], () => {
+watch([() => user?.value.favorite, () => cocktail.value._id], () => {
   isFavorite.value = user.value.favorite?.includes(cocktail.value._id)
     ? true
     : false;

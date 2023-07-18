@@ -3,5 +3,6 @@ export function isLoggedIn(state) {
 }
 
 export function getUser(state) {
+
   return state.user;
 }
