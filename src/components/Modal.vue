@@ -1,6 +1,6 @@
 <template>
   <Transition name="modal-animation">
-    <div v-if="modalActive" class="modal">
+    <div @keydown.escape="handleEscapeKey" v-if="modalActive" class="modal">
       <div ref="modalContent" v-if="modalActive" class="modal__inner">
         <slot></slot>
         <button type="button" class="modal__button" @click="onClose">
@@ -16,51 +16,56 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, watch } from "vue";
+import { ref, onMounted, onUnmounted, watch } from 'vue';
 
-import { onClickOutside } from "@vueuse/core";
-import { Icon } from "@iconify/vue";
-import AppButton from "./shared/AppButton.vue";
+import { onClickOutside } from '@vueuse/core';
+import { Icon } from '@iconify/vue';
+
 const modalContent = ref(null);
-onMounted(() => {
-  if (props.modalActive) {
-    document.body.classList.add("modal-active");
-  }
-});
-
-onUnmounted(() => {
-  document.body.classList.remove("modal-active");
-});
-
-const emit = defineEmits(["close", "cancel"]);
-
-const onClose = () => {
-  emit("close", false);
-};
-
 const props = defineProps({
   modalActive: {
     type: Boolean,
     default: false,
   },
 });
-onClickOutside(modalContent, () => {
-  onClose();
+
+onMounted(() => {
+  if (props.modalActive) {
+    document.body.classList.add('modal-active');
+  }
 });
+
+onUnmounted(() => {
+  document.body.classList.remove('modal-active');
+});
+
+const emit = defineEmits(['close', 'cancel']);
+
+const onClose = () => {
+  emit('close', false);
+};
+
+const handleEscapeKey = () => {
+  onClose();
+};
+
 watch(
   () => props.modalActive,
-  (value) => {
+  value => {
     if (value) {
-      document.body.classList.add("modal-active");
+      document.body.classList.add('modal-active');
     } else {
-      document.body.classList.remove("modal-active");
+      document.body.classList.remove('modal-active');
     }
   }
 );
+onClickOutside(modalContent, () => {
+  onClose();
+});
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/scss";
+@import '../assets/scss';
 
 .modal-animation-enter-active,
 .modal-animation-leave-active {

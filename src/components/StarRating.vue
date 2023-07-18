@@ -37,6 +37,7 @@ const ratingWidthStyle = computed(() => {
 
 <style lang="scss" scoped>
 .star-rating {
+  cursor: pointer;
   position: relative;
   display: inline-flex;
 

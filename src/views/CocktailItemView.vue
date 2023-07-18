@@ -1,5 +1,5 @@
 <template>
-  <section class="cocktail">
+  <section class="cocktail" >
     <AppContainer>
       <GoBackButton @go-back="goBack" />
       <CircleLoader v-if="isLoading" />
@@ -42,7 +42,10 @@
                 v-if="cocktail.strAlcoholic"
                 :drinkType="cocktail.strAlcoholic"
               />
-              <CocktailsCategory  v-if="cocktail.strCategory" :category="cocktail.strCategory" />
+              <CocktailsCategory
+                v-if="cocktail.strCategory"
+                :category="cocktail.strCategory"
+              />
             </div>
           </div>
           <Ingredients :cocktail="cocktail" />
@@ -52,11 +55,16 @@
       </div>
 
       <Teleport to="#modal">
-        <Modal @close="toggleModal" :modalActive="modalActive">
+        <Modal
+          @close="toggleModal"
+          
+          :modalActive="modalActive"
+        >
           <AddRating
             class="rating__modal"
             @update-rating="updateRating"
-            @close="toggleModal"
+            @keydown.escape="handleEscapeKey"
+            @on-close="toggleModal"
             :drinkId="cocktail._id"
           ></AddRating>
         </Modal>
@@ -110,17 +118,15 @@ const isLoading = ref(false);
 
 const cocktailId = route.params.id;
 
-
-const user = computed( () => {
+const user = computed(() => {
   return store.getters['auth/getUser'];
 });
 
 onMounted(async () => {
-  
   isLoading.value = true;
 
   try {
-       const result = await getCocktailById(cocktailId);
+    const result = await getCocktailById(cocktailId);
     cocktail.value = { ...result } || {};
 
     isMyDrink.value = cocktail.value.owner === user.value._id;
@@ -153,7 +159,7 @@ const updateRating = async () => {
   const { averageRating, totalVotes } = await getAverageRating(cocktailId);
   ratings.value = averageRating;
   votes.value = totalVotes;
-  // console.log('user', user.value)
+
 };
 
 const goBack = () => {
@@ -170,6 +176,11 @@ const toggleModal = () => {
   }
   modalActive.value = !modalActive.value;
 };
+const handleEscapeKey = () => {
+  if (modalActive.value) {
+    toggleModal();
+  }
+};
 
 watch([() => user?.value.favorite, () => cocktail.value._id], () => {
   isFavorite.value = user.value.favorite?.includes(cocktail.value._id)
@@ -177,6 +188,16 @@ watch([() => user?.value.favorite, () => cocktail.value._id], () => {
     : false;
 });
 
+watch(
+  () => modalActive.value,
+  isActive => {
+    if (isActive) {
+      window.addEventListener('keydown', handleEscapeKey);
+    } else {
+      window.removeEventListener('keydown', handleEscapeKey);
+    }
+  }
+);
 const toggleFavorite = async () => {
   try {
     await store.dispatch('auth/toggleFavoriteList', cocktail.value._id);

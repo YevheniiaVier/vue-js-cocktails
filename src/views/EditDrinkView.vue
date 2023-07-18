@@ -227,11 +227,7 @@
       <!-- <AppButton :loading="loading" type="button">Cancel</AppButton> -->
     </AppForm>
     <Teleport to="#modal">
-      <Modal
-        @close="toggleModal"
-        @keydown.escape="handleEscapeKey"
-        :modalActive="modalActive"
-      >
+      <Modal @close="toggleModal" :modalActive="modalActive">
         <div class="modal__avatar">
           <img
             v-if="previewImage"
@@ -449,7 +445,7 @@ const rules = computed(() => {
 const v$ = useVuelidate(rules, formData);
 
 const handleSubmit = async () => {
-const photo = file.value ? file.value : null;
+  const photo = file.value ? file.value : null;
 
   const isFormValid = await v$.value.$validate();
 

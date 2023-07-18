@@ -58,7 +58,7 @@
       </button>
     </div>
     <Teleport to="#modal">
-      <Modal @close="toggleModal" @keydown.escape="handleEscapeKey" :modalActive="modalActive">
+      <Modal @close="toggleModal"  :modalActive="modalActive">
         <div  class="modal__avatar">
           <img v-if="previewImage" :src="previewImage" alt="Avatar photo" class="avatar__big" />
           <img  v-else :src="BASE_AVATAR_URL" alt="Avatar photo" class="avatar__big">
@@ -71,7 +71,7 @@
 </template>
 <script setup>
 import { computed, ref, watch } from "vue";
-// import { onClickOutside } from "@vueuse/core";
+
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { Icon } from "@iconify/vue";

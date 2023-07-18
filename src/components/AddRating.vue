@@ -32,7 +32,7 @@ import { addRating } from '@/services/cocktails-api';
 import { ref } from 'vue';
 
 const rating = ref(1);
-const emit = defineEmits(['close', 'update-rating']);
+const emit = defineEmits(['on-close', 'update-rating']);
 
 const props = defineProps({
   values: {
@@ -55,7 +55,7 @@ const onSubmit = async () => {
   } catch (error) {
     console.log(error);
   }
-  emit('close');
+  emit('on-close');
 };
 </script>
 
