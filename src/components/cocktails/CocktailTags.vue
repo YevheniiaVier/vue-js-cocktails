@@ -1,5 +1,5 @@
 <template>
-  <ul class="tags__list" v-if="props.tags">
+  <ul class="tags__list" v-if="tags">
     <li  class="tags__item" v-for="(tag, index) in tagsSplitted" :key="index">
       <RouterLink
       :to="getRouterLink(tag)"

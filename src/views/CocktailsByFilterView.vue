@@ -1,5 +1,6 @@
 <template>
   <AppContainer>
+    <GoBackButton @go-back="goBack" />
     <h2 class="title">{{ sectionTitle }}</h2>
     <CocktailsList
       :hasMoreData="hasMoreData"
@@ -15,13 +16,14 @@
 <script setup>
 import { useRoute, useRouter } from 'vue-router';
 import { onMounted, computed, watch, ref } from 'vue';
+import GoBackButton from '../components/shared/GoBackButton.vue';
 
 import CocktailsList from '../components/cocktails/CocktailsList.vue';
 
 import AppContainer from '../components/shared/AppContainer.vue';
-// import CircleLoader from '../components/loaders/CircleLoader.vue';
 import { searchDrinksByFilter } from '../services/cocktails-api';
 const route = useRoute();
+const router = useRouter();
 
 const emptyResult = ref(false);
 const hasMoreData = ref(true);
@@ -31,18 +33,21 @@ const titles = {
   t: 'Cocktails filtered by tag',
   i: 'Cocktails filtered by ingredient',
   c: 'Cocktails filtered by category',
-  a: 'Cocktails filtered by',
+  a: 'Cocktails filtered by type',
 };
 
 const sectionTitle = computed(() => {
-  const filterParam = route.query.filter ? route.query.filter : '';
-  const titlePrefix = titles[filterParam] || '';
-  return `${titlePrefix} "${filter.value}"`;
+  const filterToShow = filter.value === "Non_Alcoholic" ? "Non alcoholic" : filter.value;
+  const titlePrefix = titles[filterParam.value] || '';
+  return `${titlePrefix} "${filterToShow}"`;
 });
 const filter = computed(() => (route.params.filter ? route.params.filter : ''));
 const filterParam = computed(() =>
   route.query.filter ? route.query.filter : ''
 );
+const goBack = () => {
+  window.history.length > 1 ? router.go(-1) : router.push('/');
+};
 
 
 

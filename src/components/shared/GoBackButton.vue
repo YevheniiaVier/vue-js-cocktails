@@ -21,7 +21,10 @@ const props = defineProps({
 <style lang="scss" scoped>
 @import "../../assets/scss";
 .btn {
-  position: relative;
+  position: fixed;
+  z-index: 10;
+  top: 10;
+  left: 10;
   display: inline-block;
   font-size: 18px;
   background: $main-color;
@@ -37,35 +40,8 @@ const props = defineProps({
 
   @include transition(background-color);
 
-  // align-items: center;
 
-  // appearance: none;
-  // border: 0;
-  // border-radius: 20px;
 
-  // box-sizing: border-box;
-  // color: $main-color;
-  // cursor: pointer;
-  // display: inline-flex;
-  // gap: 5px;
-  // font-family: "JetBrains Mono", monospace;
-  // height: 40px;
-  // justify-content: center;
-  // line-height: 1;
-  // list-style: none;
-  // overflow: hidden;
-  // padding-left: 16px;
-  // padding-right: 16px;
-  // position: relative;
-  // text-align: left;
-  // text-decoration: none;
-
-  // user-select: none;
-  // -webkit-user-select: none;
-  // touch-action: manipulation;
-  // white-space: nowrap;
-  // will-change: box-shadow, transform;
-  // font-size: 18px;
   &:hover {
     background: $accent-color;
     border: 1px solid darken($accent-color, 10%);

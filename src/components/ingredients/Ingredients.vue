@@ -1,0 +1,85 @@
+<template>
+  <div class="ingredients">
+    <p>Ingredients:</p>
+    <ul class="ingredients__list">
+      <template v-for="(el, idx) of new Array(15)" :key="idx">
+        <li v-if="cocktail[`strIngredient${idx + 1}`]">
+          <RouterLink
+            class="ingredients__item"
+            :to="getRouterLink(cocktail[`strIngredient${idx + 1}`])"
+          >
+            <img
+              class="ingredients__img"
+              :src="`https://www.thecocktaildb.com/images/ingredients/${
+                cocktail[`strIngredient${idx + 1}`]
+              }.png`"
+              :alt="cocktail[`strIngredient${idx + 1}`]"
+            />
+            {{ cocktail[`strIngredient${idx + 1}`] }} :
+            {{ cocktail[`strMeasure${idx + 1}`] || 'some' }}
+          </RouterLink>
+        </li>
+      </template>
+    </ul>
+  </div>
+</template>
+
+<script setup>
+const props = defineProps({
+  cocktail: {
+    type: Object,
+    required: true,
+  },
+});
+
+const getRouterLink = ingredient => {
+  return {
+    name: 'by-filter',
+    params: {
+      filter: ingredient,
+    },
+    query: {
+      filter: 'i',
+    },
+  };
+};
+</script>
+
+<style lang="scss" scoped>
+@import '../../assets/scss/';
+.ingredients {
+  font-weight: 600;
+  font-size: 25px;
+  line-height: 1.16;
+  margin-bottom: 20px;
+  text-align: center;
+
+  &__title {
+    font-weight: 600;
+    font-size: 25px;
+    line-height: 1.16;
+    margin-bottom: 20px;
+  }
+
+  &__list {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 1.16;
+    margin-bottom: 20px;
+    color: $text-color;
+    font-weight: 600;
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__img {
+    max-width: 100px;
+    height: auto;
+  }
+}
+</style>

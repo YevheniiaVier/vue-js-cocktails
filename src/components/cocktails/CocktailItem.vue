@@ -1,39 +1,30 @@
 <template>
   <li>
     <RouterLink
-    class="cocktail"
-    :to="{ name: 'cocktail', params: { id: cocktail._id } }"
-  >
-    <div class="cocktail__wrapper">
-      <div class="favorite" v-if="user.favorite">
-        <Icon v-if="isFavorite" icon="mdi:cards-heart" color="#c61212" />
-        <Icon v-else icon="mdi:cards-heart-outline" color="#c61212" />
-      
-      </div>
-      <StarRating class="rating" :rating="cocktail.averageRating" />
+      class="cocktail"
+      :to="{ name: 'cocktail', params: { id: cocktail._id } }"
+    >
+      <div class="cocktail__wrapper">
+        <div class="favorite" v-if="user.favorite">
+          <Icon v-if="isFavorite" icon="mdi:cards-heart" color="#c61212" />
+          <Icon v-else icon="mdi:cards-heart-outline" color="#c61212" />
+        </div>
+        <StarRating class="rating" :rating="cocktail.averageRating" />
 
-      <img
-        class="cocktail__img"
-        :src="cocktail.strDrinkThumb"
-        :alt="cocktail.strDrink"
-      />
-      <div class="cocktail__info">
-        <p>{{ cocktail.strAlcoholic }}</p>
-        <p class="ingredients">Ingredients:</p>
-        <ul class="ingredients__list">
-          <template v-for="(el, idx) of new Array(15)" :key="idx">
-            <li v-if="cocktail[`strIngredient${idx + 1}`]">
-              {{ idx + 1 }}. {{ cocktail[`strIngredient${idx + 1}`] }}
-            </li>
-          </template>
-        </ul>
+        <img
+          class="cocktail__img"
+          :src="cocktail.strDrinkThumb"
+          :alt="cocktail.strDrink"
+        />
+        <div class="cocktail__info">
+          <p>{{ cocktail.strAlcoholic }}</p>
+          <IngredientsList :cocktail="cocktail" />
+        </div>
       </div>
-    </div>
 
-    <h2 class="cocktail__title">{{ cocktail.strDrink }}</h2>
-  </RouterLink>
+      <h2 class="cocktail__title">{{ cocktail.strDrink }}</h2>
+    </RouterLink>
   </li>
-
 </template>
 
 <script setup>
@@ -41,7 +32,7 @@ import { Icon } from '@iconify/vue';
 import StarRating from '../StarRating.vue';
 import { ref, computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
-
+import IngredientsList from '../ingredients/IngredientsList.vue';
 // import { getCocktailById, getAverageRating } from "@/services/cocktails-api";
 const store = useStore();
 
@@ -51,7 +42,6 @@ const props = defineProps({
     type: Object,
   },
 });
-
 
 const user = computed(() => {
   return store.getters['auth/getUser'];
@@ -120,23 +110,7 @@ const isFavorite = computed(() => {
     }
   }
 }
-.ingredients {
-  margin-top: 10px;
-  margin-bottom: 5px;
-  &__list {
-    margin-top: 5px;
-    max-height: calc(1em * 1.3 * 6);
-    overflow: hidden;
-    line-height: 1.3;
-    align-self: left;
-  }
 
-  &__item {
-  }
-
-  &__text {
-  }
-}
 .cocktail__wrapper {
   position: relative;
   @include transition(box-shadow);
@@ -160,6 +134,5 @@ const isFavorite = computed(() => {
   top: 2%;
   right: 2%;
   // background-color: rgba(38, 41, 41, 0.773);
-
 }
 </style>

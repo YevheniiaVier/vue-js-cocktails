@@ -38,33 +38,14 @@
               <CocktailTags :tags="cocktail.strTags" />
             </div>
             <div class="cocktail__type">
-              <p>Type: {{ cocktail.strAlcoholic }}</p>
-              <p>Category: {{ cocktail.strCategory }}</p>
+              <CocktailsType
+                v-if="cocktail.strAlcoholic"
+                :drinkType="cocktail.strAlcoholic"
+              />
+              <CocktailsCategory  v-if="cocktail.strCategory" :category="cocktail.strCategory" />
             </div>
           </div>
-
-          <div class="cocktail__ingredients ingredients">
-            <!-- <h2 class="ingredients__title">Ingredients</h2> -->
-
-            <ul class="ingredients__list">
-              <template v-for="(el, idx) of new Array(15)" :key="idx">
-                <li
-                  class="ingredients__item"
-                  v-if="cocktail[`strIngredient${idx + 1}`]"
-                >
-                  <img
-                    class="ingredients__img"
-                    :src="`https://www.thecocktaildb.com/images/ingredients/${
-                      cocktail[`strIngredient${idx + 1}`]
-                    }.png`"
-                    :alt="cocktail[`strIngredient${idx + 1}`]"
-                  />
-                  {{ cocktail[`strIngredient${idx + 1}`] }} :
-                  {{ cocktail[`strMeasure${idx + 1}`] || 'some' }}
-                </li>
-              </template>
-            </ul>
-          </div>
+          <Ingredients :cocktail="cocktail" />
         </div>
 
         <CocktailInstructions :cocktail="cocktail" />
@@ -106,6 +87,10 @@ import { useToast } from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
 import FavoriteButton from '../components/FavoriteButton.vue';
 import CocktailTags from '../components/cocktails/CocktailTags.vue';
+import Ingredients from '../components/ingredients/Ingredients.vue';
+import CocktailsType from '../components/cocktails/CocktailsType.vue';
+
+import CocktailsCategory from '../components/cocktails/CocktailsCategory.vue';
 const route = useRoute();
 
 const router = useRouter();
@@ -125,8 +110,8 @@ const isLoading = ref(false);
 
 const cocktailId = route.params.id;
 
-const user = computed(() => {
-  return store.getters['auth/getUser'];
+const user = computed(async () => {
+  return await store.getters['auth/getUser'];
 });
 
 onMounted(async () => {
@@ -239,48 +224,6 @@ const toggleFavorite = async () => {
     padding: 10px;
     color: $text-color;
     font-weight: 600;
-  }
-
-  &__ingredients {
-    font-weight: 600;
-    font-size: 25px;
-    line-height: 1.16;
-    margin-bottom: 20px;
-    text-align: center;
-  }
-}
-/* .tags {
-  &__names {
-    color: green;
-  }
-} */
-.ingredients {
-  &__title {
-    font-weight: 600;
-    font-size: 25px;
-    line-height: 1.16;
-    margin-bottom: 20px;
-  }
-
-  &__list {
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 1.16;
-    margin-bottom: 20px;
-    color: $text-color;
-    font-weight: 600;
-  }
-
-  &__item {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
-  &__img {
-    max-width: 100px;
-    height: auto;
   }
 }
 

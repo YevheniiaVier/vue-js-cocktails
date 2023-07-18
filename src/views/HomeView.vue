@@ -9,6 +9,7 @@
 
       </template>
     </Suspense>
+    <AppLetters />
   </AppContainer>
 </template>
 
@@ -18,7 +19,7 @@ import { ref, onErrorCaptured, Suspense } from "vue";
 import CircleLoader from "../components/loaders/CircleLoader.vue";
 import RandomCocktails from "../components/cocktails/RandomCocktails.vue";
 import AppContainer from "@/components/shared/AppContainer.vue";
-
+import AppLetters from '../components/shared/AppLetters.vue';
 const error = ref(null);
 
 onErrorCaptured(() => {

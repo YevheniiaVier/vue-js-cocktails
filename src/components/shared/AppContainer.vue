@@ -7,7 +7,7 @@
 <script setup></script>
 <style lang="scss" scoped>
 .container {
-
+position: relative;
   padding: 10px 20px;
   max-width: 1200px;
   margin: 0 auto;
