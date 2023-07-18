@@ -56,7 +56,6 @@ const handleSearch = data => {
     });
   }
   if (keyword.value) {
-    console.log('keyword.value', keyword.value);
     searchCocktails(keyword.value, page.value);
   }
 };

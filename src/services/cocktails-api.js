@@ -53,10 +53,24 @@ export const getListOfIngredients = async () => {
   return data;
 };
 
-export const searchDrinksByIngredient = async (ingredient) => {
-  const { data } = await instance.get(`drinks/filter?i=${ingredient}`);
+
+export const searchDrinksByFilter = async (filter, page, param) => {
+  const { data } = await instance.get(`drinks/filter?${param}=${filter}&page=${page}`);
   return data;
 };
+// export const searchDrinksByIngredient = async (ingredient, page) => {
+//   const { data } = await instance.get(`drinks/filter?i=${ingredient}&page=${page}`);
+//   return data;
+// };
+
+// export const searchDrinksByCategory = async (category, page) => {
+//   const { data } = await instance.get(`drinks/filter?c=${category}&page=${page}`);
+//   return data;
+// };
+// export const searchDrinksByAlcohol = async (alcohol, page) => {
+//   const { data } = await instance.get(`drinks/filter?a=${alcohol}&page=${page}`);
+//   return data;
+// };
 
 export const getRandomCocktails = async () => {
   const { data } = await instance.get("drinks/randoms");

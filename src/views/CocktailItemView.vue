@@ -35,9 +35,7 @@
                 :key="ratingKey"
               />
               <p>Total votes: {{ votes }}</p>
-              <p v-if="cocktail.strTags" class="tags__names">
-                {{ cocktail.strTags }}
-              </p>
+              <CocktailTags :tags="cocktail.strTags" />
             </div>
             <div class="cocktail__type">
               <p>Type: {{ cocktail.strAlcoholic }}</p>
@@ -69,7 +67,7 @@
           </div>
         </div>
 
-       <CocktailInstructions :cocktail="cocktail"/>
+        <CocktailInstructions :cocktail="cocktail" />
       </div>
 
       <Teleport to="#modal">
@@ -107,7 +105,7 @@ import CocktailInstructions from '../components/instructions/CocktailInstruction
 import { useToast } from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
 import FavoriteButton from '../components/FavoriteButton.vue';
-
+import CocktailTags from '../components/cocktails/CocktailTags.vue';
 const route = useRoute();
 
 const router = useRouter();
@@ -286,7 +284,6 @@ const toggleFavorite = async () => {
   }
 }
 
-
 .drink__action {
   position: absolute;
   top: 0;
@@ -315,5 +312,4 @@ const toggleFavorite = async () => {
 .img_wrapper {
   position: relative;
 }
-
 </style>

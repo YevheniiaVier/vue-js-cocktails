@@ -15,6 +15,7 @@ const AddDrinkView = () => import('../views/AddDrinkView.vue');
 const EditDrinkView = () => import('../views/EditDrinkView.vue');
 const CocktailsByLetterView = () =>
   import('../views/CocktailsByLetterView.vue');
+const CocktailsByFilterView = () => import('../views/CocktailsByFilterView.vue');
 
 import store from '../store';
 
@@ -82,6 +83,11 @@ const router = createRouter({
           path: '/cocktail/:id',
           name: 'cocktail',
           component: CocktailItemView,
+        },
+        {
+          path: '/by-filter/:filter',
+          name: 'by-filter',
+          component: CocktailsByFilterView, 
         },
       ],
     },
