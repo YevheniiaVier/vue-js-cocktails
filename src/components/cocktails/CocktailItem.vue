@@ -1,11 +1,11 @@
 <template>
-  <li>
+  <li class="cocktail__item">
     <RouterLink
       class="cocktail"
       :to="{ name: 'cocktail', params: { id: cocktail._id } }"
     >
       <div class="cocktail__wrapper">
-        <div class="favorite" v-if="user.favorite">
+        <div class="favorite">
           <Icon v-if="isFavorite" icon="mdi:cards-heart" color="#c61212" />
           <Icon v-else icon="mdi:cards-heart-outline" color="#c61212" />
         </div>
@@ -33,7 +33,6 @@ import StarRating from '../StarRating.vue';
 import { ref, computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import IngredientsList from '../ingredients/IngredientsList.vue';
-// import { getCocktailById, getAverageRating } from "@/services/cocktails-api";
 const store = useStore();
 
 const props = defineProps({
@@ -58,9 +57,16 @@ const isFavorite = computed(() => {
 
 <style lang="scss" scoped>
 @import '../../assets/scss';
+.cocktail__item {
+  width: 320px;
+  height: 320px;
+  margin-bottom: 20px;
+
+}
 .cocktail {
   color: $text-color;
-  max-width: 320px;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -82,7 +88,8 @@ const isFavorite = computed(() => {
 
   &__img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: contain;
     overflow: hidden;
     border-radius: 5px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
@@ -112,6 +119,8 @@ const isFavorite = computed(() => {
 }
 
 .cocktail__wrapper {
+  width: 100%;
+  height: 100%;
   position: relative;
   @include transition(box-shadow);
   border-radius: 5px;
