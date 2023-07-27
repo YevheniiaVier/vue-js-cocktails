@@ -422,11 +422,7 @@ const handleSubmit = async () => {
 @import '../assets/scss';
 .multiselect {
   color: orange;
-  /* height: 40px;
-  background-color: #fff;
-  display: flex;
-  align-items: center;
-  padding: 10px; */
+
 }
 .multiselect-wrapper {
   color: violet;
