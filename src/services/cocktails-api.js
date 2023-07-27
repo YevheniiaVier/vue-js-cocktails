@@ -86,10 +86,8 @@ export const getCocktailsByLetter = async (letter, page) => {
   return data;
 };
 
-export const getIngredientById = async (ingredient) => {
-  const { data } = await instance.get(`ingredients/${ingredient}`);
-  return data;
-};
+
+
 
 export const addRating = async (cocktailId, value) => {
   const { token } = store.state.auth;

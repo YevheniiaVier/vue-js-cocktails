@@ -1,5 +1,5 @@
 import * as api from "../../services/cocktails-api";
-
+import * as ingApi from "../../services/ingredients-api";
 export const searchCocktailsByName = async ({ commit }, {query, page}) => {
   const { drinks } = await api.searchCocktailByName(query, page);
 
@@ -21,16 +21,15 @@ export const getRandomCocktails = async ({ commit }) => {
 //   commit("setIngredients", drinks);
 // };
 
-export const getAllIngredients = async ({ commit }) => {
-  const { ingredients } = await api.getAllIngredients();
-  commit("setIngredients", ingredients);
-};
+
 export const getListIngredients = async ({ commit }) => {
   const { ingredients } = await api.getListOfIngredients();
   commit("setIngredientsList", ingredients);
 };
 
-// export const deleteCocktail = async ({ commit }, payload) => {
-//   const  drink  = await api.removeDrink(payload);
-//   commit("setIngredientsList", ingredients);
-// };
+
+
+export const getAllIngredients = async ({ commit }) => {
+  const { ingredients } = await ingApi.getAllOfIngredients();
+  commit("setIngredients", ingredients);
+};

@@ -20,20 +20,7 @@ const props = defineProps({
   },
 });
 
-const tagsSplitted = computed(() => {
-  return props.tags.split(',');
-});
-const getRouterLink = tag => {
-  return {
-    name: 'by-filter',
-    params: {
-      filter: tag,
-    },
-    query: {
-      filter: 't',
-    },
-  };
-};
+
 </script>
 
 <style lang="scss" scoped>
@@ -49,10 +36,5 @@ const getRouterLink = tag => {
     align-self: left;
   }
 
-  &__item {
-  }
-
-  &__text {
-  }
 }
 </style>

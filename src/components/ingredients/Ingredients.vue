@@ -1,7 +1,7 @@
 <template>
   <div class="ingredients">
     <p>Ingredients:</p>
-    <ul class="ingredients__list">
+    <ul v-if="ingredients.length" class="ingredients__list">
       <template v-for="(el, idx) of new Array(15)" :key="idx">
         <li v-if="cocktail[`strIngredient${idx + 1}`]">
           <RouterLink
@@ -25,6 +25,14 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue';
+import { useStore } from 'vuex';
+
+import { getAllOfIngredients } from '../../services/ingredients-api';
+const store = useStore();
+
+const ingredients = ref([]);
+
 const props = defineProps({
   cocktail: {
     type: Object,
@@ -32,14 +40,22 @@ const props = defineProps({
   },
 });
 
-const getRouterLink = ingredient => {
+onMounted(async () => {
+  try {
+    const result = await getAllOfIngredients();
+    ingredients.value = [...result.ingredients];
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+const getRouterLink = name => {
+  const data = ingredients.value.find(el => el.strIngredient === name);
+
   return {
-    name: 'by-filter',
+    name: 'ingredient',
     params: {
-      filter: ingredient,
-    },
-    query: {
-      filter: 'i',
+      id: data._id,
     },
   };
 };
