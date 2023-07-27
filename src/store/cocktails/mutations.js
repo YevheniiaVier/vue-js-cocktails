@@ -27,3 +27,7 @@ export function setIngredients(state, data) {
 export function setIngredientsList(state, data) {
   state.ingredientsList = [...data];
 }
+
+export function setTagsList(state, data) {
+  state.tagsList = [...data];
+}

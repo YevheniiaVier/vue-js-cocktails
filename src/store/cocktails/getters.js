@@ -39,3 +39,7 @@ export const getIngredients = ({ ingredients }) => {
 export const getIngredientsList = ({ ingredientsList }) => {
   return ingredientsList;
 };
+
+export const getTagsList = ({ tagsList }) => {
+  return tagsList;
+};

@@ -9,6 +9,7 @@ const initialState = {
   // cocktailsByIngredient: [],
   ingredients: [],
   ingredientsList:[],
+  tagsList:[],
 };
 
 export default {

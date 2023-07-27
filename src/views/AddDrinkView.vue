@@ -9,10 +9,11 @@
         v-model="formData.strDrink"
       />
       <span
-          v-for="error in v$.strDrink.$errors"
-          :key="error.$uid"
-          class="error__red"
-          >{{ error.$message }}</span>
+        v-for="error in v$.strDrink.$errors"
+        :key="error.$uid"
+        class="error__red"
+        >{{ error.$message }}</span
+      >
       <AppInput
         class="required-field"
         @change="onFileChange"
@@ -22,11 +23,18 @@
         v-model="formData.strDrinkThumb"
       />
       <span
-          v-for="error in v$.strDrinkThumb.$errors"
-          :key="error.$uid"
-          class="error__red"
-          >{{ error.$message }}</span>
-      <AppInput id="strTags" label="Tags" v-model="formData.strTags" />
+        v-for="error in v$.strDrinkThumb.$errors"
+        :key="error.$uid"
+        class="error__red"
+        >{{ error.$message }}</span
+      >
+
+      <VueMultiselect
+        
+      @update:selectedTags="onTagsSelect"
+        :selectedTags="formData.strTags"
+      />
+
       <AppInput
         id="strVideo"
         label="Link to video"
@@ -41,10 +49,11 @@
         v-model="formData.strCategory"
       />
       <span
-          v-for="error in v$.strCategory.$errors"
-          :key="error.$uid"
-          class="error__red"
-          >{{ error.$message }}</span>
+        v-for="error in v$.strCategory.$errors"
+        :key="error.$uid"
+        class="error__red"
+        >{{ error.$message }}</span
+      >
       <AppSelect
         class="required-field"
         @select="onSelect('strAlcoholic', $event)"
@@ -54,15 +63,22 @@
         v-model="formData.strAlcoholic"
       />
       <span
-          v-for="error in v$.strAlcoholic.$errors"
-          :key="error.$uid"
-          class="error__red"
-          >{{ error.$message }}</span>
-
-      <AppInput id="strGlass" label="Glass" v-model="formData.strGlass" />
-      <label for="strInstructions">Write instructions</label>
-      <textarea
+        v-for="error in v$.strAlcoholic.$errors"
+        :key="error.$uid"
+        class="error__red"
+        >{{ error.$message }}</span
+      >
+      <AppSelect
         class="required-field"
+        @select="onSelect('strGlass', $event)"
+        id="strGlass"
+        label="strGlass"
+        :items="glassSelectItems"
+        v-model="formData.strGlass"
+      />
+      <label for="strInstructions">Write instructions *</label>
+      <textarea
+        class="required-field text-input"
         id="strInstructions"
         label="Instructions"
         rows="5"
@@ -71,41 +87,45 @@
       >
       </textarea>
       <span
-          v-for="error in v$.strInstructions.$errors"
-          :key="error.$uid"
-          class="error__red"
-          >{{ error.$message }}</span>
+        v-for="error in v$.strInstructions.$errors"
+        :key="error.$uid"
+        class="error__red"
+        >{{ error.$message }}</span
+      >
 
-      <!-- <AppInput
-        id="strInstructionsES"
-        label="strInstructionsES"
-        v-model="formData.strInstructionsES"
-      />.required-field input {
-        border-color: red;
-      }
-      .required-field label::after {
-        content: '*';
-        color: red;
-        margin-left: 4px;
-      }
-      <AppInput
+      <label for="strInstructionsDE">Instructions in German</label>
+      <textarea
+        class="required-field text-input"
         id="strInstructionsDE"
-        label="strInstructionsDE"
+        label="InstructionsDE"
+        rows="5"
+        cols="33"
         v-model="formData.strInstructionsDE"
-      />
-      <AppInput
+      >
+      </textarea>
+      <label for="strInstructionsFR">Instructions in French</label>
+      <textarea
+        class="required-field text-input"
         id="strInstructionsFR"
-        label="strInstructionsFR"
+        label="InstructionsFR"
+        rows="5"
+        cols="33"
         v-model="formData.strInstructionsFR"
-      />
-      <AppInput
+      >
+      </textarea>
+      <label for="strInstructionsIT">Instructions in Italian</label>
+      <textarea
+        class="required-field text-input"
         id="strInstructionsIT"
-        label="strInstructionsIT"
+        label="InstructionsIT"
+        rows="5"
+        cols="33"
         v-model="formData.strInstructionsIT"
-      /> -->
+      >
+      </textarea>
+
       <div class="ingredient_wrapper">
-        <SimpleTypeahead
-          class="input"
+        <vue3-simple-typeahead
           @selectItem="value => onIngredientSelect(value, 0)"
           id="strIngredient1"
           placeholder="Choose ingredient"
@@ -120,8 +140,7 @@
         />
       </div>
       <div class="ingredient_wrapper">
-        <SimpleTypeahead
-          class="input"
+        <vue3-simple-typeahead
           @selectItem="value => onIngredientSelect(value, 1)"
           id="strIngredient2"
           placeholder="Choose ingredient"
@@ -136,8 +155,7 @@
         />
       </div>
       <div class="ingredient_wrapper">
-        <SimpleTypeahead
-          class="input"
+        <vue3-simple-typeahead
           @selectItem="value => onIngredientSelect(value, 2)"
           id="strIngredient3"
           placeholder="Choose ingredient"
@@ -152,8 +170,7 @@
         />
       </div>
       <div class="ingredient_wrapper">
-        <SimpleTypeahead
-          class="input"
+        <vue3-simple-typeahead
           @selectItem="value => onIngredientSelect(value, 3)"
           id="strIngredient4"
           placeholder="Choose ingredient"
@@ -168,8 +185,7 @@
         />
       </div>
       <div class="ingredient_wrapper">
-        <SimpleTypeahead
-          class="input"
+        <vue3-simple-typeahead
           @selectItem="value => onIngredientSelect(value, 4)"
           id="strIngredient5"
           placeholder="Choose ingredient"
@@ -184,8 +200,7 @@
         />
       </div>
       <div class="ingredient_wrapper">
-        <SimpleTypeahead
-          class="input"
+        <vue3-simple-typeahead
           @selectItem="value => onIngredientSelect(value, 5)"
           id="strIngredient6"
           placeholder="Choose ingredient"
@@ -218,8 +233,7 @@ import { useStore } from 'vuex';
 import { useToast } from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
 import { addCocktail } from '../services/cocktails-api';
-import SimpleTypeahead from 'vue3-simple-typeahead';
-// import 'vue3-simple-typeahead/dist/vue3-simple-typeahead.css';
+import VueMultiselect from '../components/shared/\/form/MultiSelect.vue';
 
 const store = useStore();
 const router = useRouter();
@@ -247,10 +261,50 @@ const onIngredientSelect = (ingredient, index) => {
   formData[ingredientKey] = ingredient;
 };
 
+const onTagsSelect = selectedTags => {
+  formData.strTags = selectedTags;
+  console.log('formData.strTags', formData.strTags);
+};
+
 const typeSelectItems = reactive([
   { value: '', label: 'Type', selected: true },
   'Alcoholic',
   'Non alcoholic',
+]);
+
+const glassSelectItems = reactive([
+  { value: '', label: 'Glass', selected: true },
+  'Balloon Glass',
+  'Beer Glass',
+  'Beer mug',
+  'Beer pilsner',
+  'Brandy snifter',
+  'Champagne flute',
+  'Cocktail glass',
+  'Coffee mug',
+  'Collins glass',
+  'Copper Mug',
+  'Cordial glass',
+  'Coupe Glass',
+  'Highball glass',
+  'Hurricane glass',
+  'Irish coffee cup',
+  'Jar',
+  'Margarita/Coupette glass',
+  'Margarita glass',
+  'Martini Glass',
+  'Mason jar',
+  'Nick and Nora Glass',
+  'Old-fashioned glass',
+  'Parfait glass',
+  'Pitcher',
+  'Pint glass',
+  'Pousse cafe glass',
+  'Shot glass',
+  'Whiskey Glass',
+  'Whiskey sour glass',
+  'White wine glass',
+  'Wine Glass',
 ]);
 
 const categorySelectItems = reactive([
@@ -274,13 +328,12 @@ const onSelect = (field, value) => {
 const formData = reactive({
   strDrink: '',
   strDrinkThumb: '',
-  strTags: '',
+  strTags: [],
   strVideo: '',
   strCategory: '',
   strAlcoholic: '',
   strGlass: '',
   strInstructions: '',
-  strInstructionsES: '',
   strInstructionsDE: '',
   strInstructionsFR: '',
   strInstructionsIT: '',
@@ -365,35 +418,60 @@ const handleSubmit = async () => {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '../assets/scss';
-.ingredient_wrapper {
+.multiselect {
+  color: orange;
+  /* height: 40px;
+  background-color: #fff;
   display: flex;
+  align-items: center;
+  padding: 10px; */
 }
-// .input {
-//    height: 40px;
-//   border: 2px solid $main-color;
-//   border-radius: 4px;
-//   color: red;
-//   padding: 8px 12px;
-//   font-size: 16px;
-//   transition: border-color $time-function;
+.multiselect-wrapper {
+  color: violet;
+}
 
-//   &:focus,
-//   &:hover {
-//     outline: none;
-//     border-color: $accent-color;
-//   }
-// }
+.ingredient_wrapper,
+.tags__wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: $accent-color;
+}
+.text-input {
+  font-size: 18px;
+  color: $main-color;
+}
+.simple-typeahead-input {
+  height: 100%;
+  width: 100%;
+  border: 2px solid $main-color;
+  border-radius: 4px;
+  color: $main-color;
+  padding: 8px 12px;
+  font-size: 16px;
+  transition: border-color $time-function;
+  width: 100%;
+  outline: none;
+  &:focus,
+  &:hover {
+    border-color: $accent-color;
+  }
+}
+
+.simple-typeahead {
+  height: 40px;
+  border-radius: 4px;
+}
+
 .error__red {
   color: red;
 }
-// .required-field .label::after {
-//   content: '*';
-//   color: red;
-//   margin-left: 4px;
-// }
-// .simple-typeahead > input {
-//   background-color: red;
-// }
+/* .multiselect-dropdown {
+  color: red;
+}
+.multiselect-option {
+  color: green;
+} */
 </style>

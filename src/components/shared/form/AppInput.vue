@@ -41,8 +41,10 @@ defineProps({
 
 <style lang="scss" scoped>
 @import "../../../assets/scss";
+
 label {
   margin-bottom: 10px;
+  font-weight: 600;
 }
 .input__wrap {
   display: flex;
@@ -51,10 +53,12 @@ label {
 .input {
   border: 2px solid $main-color;
   border-radius: 4px;
-  color: $text-color;
+  color: $accent-color;
   padding: 8px 12px;
-  font-size: 16px;
+  font-size: 14px;
   transition: border-color $time-function;
+  width: 100%;
+  height: 40px;
 
   &:focus,
   &:hover {

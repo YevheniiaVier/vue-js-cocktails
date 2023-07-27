@@ -33,3 +33,8 @@ export const getAllIngredients = async ({ commit }) => {
   const { ingredients } = await ingApi.getAllOfIngredients();
   commit("setIngredients", ingredients);
 };
+
+export const getListTags = async ({ commit }) => {
+  const { tagsValues } = await api.getListOfTags();
+  commit("setTagsList", tagsValues);
+};

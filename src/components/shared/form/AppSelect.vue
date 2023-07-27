@@ -6,7 +6,7 @@
       :value="item.value"
       :selected="item.selected"
     >
-      {{ item.label }}
+      {{ item.label }} 
     </option>
   </select>
 </template>
@@ -33,4 +33,24 @@ const onSelect = (event) => {
   emit("select", value);
 };
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@import '../../../assets/scss/';
+.select {
+  border: 2px solid $main-color;
+  border-radius: 4px;
+  color: $accent-color;
+  padding: 8px 12px;
+  font-size: 16px;
+  transition: border-color $time-function;
+  width: 100%;
+
+  /* background: transparent; */
+  /* appearance: none; */
+
+  &:focus,
+  &:hover {
+    outline: none;
+    border-color: $accent-color;
+  }
+}
+</style>

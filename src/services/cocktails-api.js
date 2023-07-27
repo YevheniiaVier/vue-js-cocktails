@@ -53,6 +53,10 @@ export const getListOfIngredients = async () => {
   return data;
 };
 
+export const getListOfTags = async () => {
+  const { data } = await instance.get(`drinks/tags`);
+  return data;
+};
 
 export const searchDrinksByFilter = async (filter, page, param) => {
   const { data } = await instance.get(`drinks/filter?${param}=${filter}&page=${page}`);
