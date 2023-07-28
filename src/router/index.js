@@ -147,7 +147,16 @@ router.beforeEach((to, from, next) => {
     } else {
       next();
     }
-  } else {
+    
+  } 
+  else if (to.name === 'favorites' || to.name === 'add-drink' || to.name === 'edit-drink' ) {
+    if (!isLoggedIn) {
+      next({ name: 'login-page', query: { redirect: to.fullPath } });
+    } else {
+      next();
+    }
+  }
+  else {
     next();
   }
 });

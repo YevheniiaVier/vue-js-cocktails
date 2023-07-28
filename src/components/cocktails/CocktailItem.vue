@@ -30,7 +30,7 @@
 <script setup>
 import { Icon } from '@iconify/vue';
 import StarRating from '../StarRating.vue';
-import { ref, computed, onMounted } from 'vue';
+import { computed } from 'vue';
 import { useStore } from 'vuex';
 import IngredientsList from '../ingredients/IngredientsList.vue';
 const store = useStore();
@@ -47,8 +47,11 @@ const user = computed(() => {
 });
 
 const isFavorite = computed(() => {
-  if (!user.value.favorite) {
-    return;
+  if (!user.value) {
+    return false;
+  }
+  if (!user.value?.favorite) {
+    return false;
   }
 
   return user.value.favorite.includes(props.cocktail._id);
@@ -61,7 +64,6 @@ const isFavorite = computed(() => {
   width: 320px;
   height: 320px;
   margin-bottom: 20px;
-
 }
 .cocktail {
   color: $text-color;

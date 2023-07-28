@@ -181,7 +181,7 @@ const handleEscapeKey = () => {
   }
 };
 
-watch([() => user?.value.favorite, () => cocktail.value._id], () => {
+watch([() => user?.value?.favorite, () => cocktail.value._id], () => {
   isFavorite.value = user.value.favorite?.includes(cocktail.value._id)
     ? true
     : false;

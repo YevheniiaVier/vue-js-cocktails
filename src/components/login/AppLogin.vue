@@ -72,15 +72,15 @@ const rules = computed(() => {
 const v$ = useVuelidate(rules, formData);
 
 const loading = ref(false);
+
 const handleSubmit = async () => {
   const isFormValid = await v$.value.$validate();
 
   if (isFormValid) {
     try {
       loading.value = true;
-
       await store.dispatch("auth/login", formData);
-      router.push({ name: "home" });
+      await router.push({ name: "home" });
       reset();
     } catch (error) {
       console.log(error);
