@@ -241,7 +241,7 @@
 </template>
 
 <script setup>
-import { reactive, ref, computed, onMounted } from 'vue';
+import { reactive, ref, computed, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useRoute } from 'vue-router';
 import useVuelidate from '@vuelidate/core';
@@ -259,7 +259,7 @@ import {
 } from '../../../services/cocktails-api';
 import VueMultiselect from './MultiSelect.vue';
 import { Icon } from '@iconify/vue';
-const emit = defineEmits(["onModalOpen"]);
+const emit = defineEmits(['onModalOpen']);
 
 const store = useStore();
 const router = useRouter();
@@ -271,22 +271,30 @@ const ingredients = computed(() => {
 
 const isEditPage = computed(() => route.name === 'edit-drink');
 const onModalOpen = () => {
-  emit("onModalOpen") 
-}
+  emit('onModalOpen');
+};
 const props = defineProps({
   cocktail: {
     type: Object,
     default: {},
   },
+  photoFile: {
+    type: File,
+  },
+  photoName: {
+    type: String,
+
+  },
 });
 
 onMounted(async () => {
+  console.log('props.photoName', props.photoName)
+  console.log('formData.str', formData.strDrinkThumb)
   try {
     await store.dispatch('cocktails/getListIngredients');
     if (isEditPage) {
       const { cocktail } = props;
       formData.strDrink = cocktail.strDrink || '';
-    //   formData.strTags = cocktail.strTags || [];
       formData.strTags = [];
       formData.strVideo = cocktail.strVideo || '';
       formData.strCategory = cocktail.strCategory || '';
@@ -297,7 +305,7 @@ onMounted(async () => {
       formData.strInstructionsDE = cocktail.strInstructionsDE || '';
       formData.strInstructionsFR = cocktail.strInstructionsFR || '';
 
-      formData.strDrinkThumb = cocktail.strDrinkThumb || '';
+      formData.strDrinkThumb = props.photoName ? props.photoName : cocktail.strDrinkThumb || '';
 
       formData.strIngredient1 = cocktail.strIngredient1 || '';
       formData.strIngredient2 = cocktail.strIngredient2 || '';
@@ -443,7 +451,7 @@ const onSelect = (field, value) => {
 
 const formData = reactive({
   strDrink: '',
-  strDrinkThumb: '',
+  strDrinkThumb: props.photoName ? props.photoName : '',
   strTags: [],
   strVideo: '',
   strCategory: '',
@@ -520,12 +528,14 @@ const handleSubmit = async () => {
   if (isFormValid) {
     try {
       loading.value = true;
-
+      console.log('isEditPage.value', isEditPage.value);
       if (!isEditPage.value) {
         await addCocktail(formData, file.value);
         router.push({ name: 'my-drinks' });
       } else if (isEditPage.value) {
-        const photo = file.value ? file.value : null;
+        console.log('props.photoFile', props.photoFile);
+        const photo = props.photoFile ? props.photoFile : null;
+        console.log('photo', photo);
         const drinkId = route.params.id;
         await updateCocktailInfo(drinkId, formData, photo);
         router.push({ name: 'cocktail', params: { id: drinkId } });
@@ -539,6 +549,11 @@ const handleSubmit = async () => {
     }
   }
 };
+watch(props, (newProps) => {
+  if (newProps.photoName) {
+    formData.strDrinkThumb = newProps.photoName;
+  }
+});
 </script>
 
 <style lang="scss">
