@@ -7,7 +7,7 @@
   >
     <CircleLoader v-if="loading" width="34" height="34" class="btn__loader" />
     <span class="btn__content" :class="contentStyle">
-      <slot></slot>
+      <slot>{{ text }}</slot>
     </span>
   </button>
 </template>
@@ -29,6 +29,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  text: {
+    type: String,
+
+  }
 });
 const contentStyle = computed(() => ({
   "btn__content--hidden": props.loading,

@@ -1,5 +1,5 @@
 <template>
-  <section class="cocktail" >
+  <section class="cocktail">
     <AppContainer>
       <GoBackButton @go-back="goBack" />
       <CircleLoader v-if="isLoading" />
@@ -46,6 +46,10 @@
                 v-if="cocktail.strCategory"
                 :category="cocktail.strCategory"
               />
+              <p v-if="cocktail.strVideo">
+                Video link: 
+                <a href="cocktail.strVideo">{{ cocktail.strVideo }}</a>
+              </p>
             </div>
           </div>
           <Ingredients :cocktail="cocktail" />
@@ -55,11 +59,7 @@
       </div>
 
       <Teleport to="#modal">
-        <Modal
-          @close="toggleModal"
-          
-          :modalActive="modalActive"
-        >
+        <Modal @close="toggleModal" :modalActive="modalActive">
           <AddRating
             class="rating__modal"
             @update-rating="updateRating"
@@ -159,7 +159,6 @@ const updateRating = async () => {
   const { averageRating, totalVotes } = await getAverageRating(cocktailId);
   ratings.value = averageRating;
   votes.value = totalVotes;
-
 };
 
 const goBack = () => {

@@ -6,31 +6,24 @@
   </div>
 </template>
 <script setup>
-const emit = defineEmits(["submit"]);
+const emit = defineEmits(['submit']);
 const onSubmit = () => {
-  emit("submit");
+  emit('submit');
 };
 </script>
 <style lang="scss" scoped>
-@import "../../../assets/scss";
+@import '../../../assets/scss';
 .form {
-  /* display: flex;
-
-  gap: 15px;
-  flex-direction: column;
-  width: 360px; */
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 360px;
+  max-width: 400px;
   margin: 0 auto;
   gap: 15px;
   padding: 20px;
 }
 .form__wrapper {
   display: flex;
-  /* width: 100%; */
   align-items: center;
-  /* padding: 20px; */
 }
 </style>
