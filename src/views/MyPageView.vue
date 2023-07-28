@@ -1,6 +1,6 @@
 <template>
   <AppContainer class="nav__container">
-    <div class="navigation">
+    <nav class="navigation">
       <RouterLink
       class="link"
       exact-active-class="active-link"
@@ -23,7 +23,7 @@
     >
       Add cocktail
     </RouterLink>
-    </div>
+    </nav>
  
     <RouterView/>
      

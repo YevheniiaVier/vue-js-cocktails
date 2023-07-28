@@ -50,7 +50,7 @@ onMounted(async () => {
 });
 
 const getRouterLink = name => {
-  const data = ingredients.value.find(el => el.strIngredient === name);
+  const data = ingredients.value.find(el => el.strIngredient.toLowerCase() === name.toLowerCase());
   if (!data) {
     return {};
   }

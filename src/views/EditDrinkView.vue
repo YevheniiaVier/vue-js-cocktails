@@ -1,6 +1,7 @@
 <template>
   <div>
-    <DrinkForm :cocktail="cocktail" />
+    <DrinkForm @onModalOpen="toggleModal" :cocktail="cocktail" />
+    <GoBackButton @go-back="goBack" />
     <Teleport to="#modal">
       <Modal @close="toggleModal" :modalActive="modalActive">
         <div class="modal__avatar">
@@ -35,6 +36,11 @@ import { useRoute } from 'vue-router';
 import Modal from '../components/Modal.vue';
 import DrinkImgUpdate from '../components//DrinkImgUpdate.vue';
 import { getCocktailById } from '../services/cocktails-api';
+import AppContainer from '@/components/shared/AppContainer.vue';
+import GoBackButton from '../components/shared/GoBackButton.vue';
+import { useRouter } from 'vue-router';
+const router = useRouter();
+
 const cocktail = ref({});
 const route = useRoute();
 
@@ -63,6 +69,9 @@ onMounted(async () => {
 
 const updatePreviewImage = image => {
   previewImage.value = image;
+};
+const goBack = () => {
+  window.history.length > 1 ? router.go(-1) : router.push('/');
 };
 
 const toggleModal = () => {

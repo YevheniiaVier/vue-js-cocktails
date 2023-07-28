@@ -11,7 +11,7 @@
     />
 
     <section class="ingredient__drinks">
-      <h2 class="ingredient__drinks-title">Drinks with this ingredient</h2>
+      <h2 class="ingredient__drinks-title">Drinks with {{ ingredient.strIngredient }}</h2>
       <CocktailsList
         :hasMoreData="hasMoreData"
         @updatePage="getDrinks"
@@ -58,7 +58,7 @@ const user = computed(() => {
 const getDrinks = async (page = 1) => {
   try {
     const { drinks } = await searchDrinksByFilter(
-      ingredient.value.strIngredient,
+      ingredient.value.strIngredient.toLowerCase(),
       page,
       'i'
     );

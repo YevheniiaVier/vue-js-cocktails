@@ -37,7 +37,7 @@
           v-model="formData.strDrinkThumb"
           readonly
         />
-        <button type="button" class="insert__btn" @click="toggleModal">
+        <button type="button" class="insert__btn" @click="onModalOpen">
           <Icon
             icon="material-symbols:attach-file-add-rounded"
             color="#230312"
@@ -259,6 +259,7 @@ import {
 } from '../../../services/cocktails-api';
 import VueMultiselect from './MultiSelect.vue';
 import { Icon } from '@iconify/vue';
+const emit = defineEmits(["onModalOpen"]);
 
 const store = useStore();
 const router = useRouter();
@@ -269,7 +270,9 @@ const ingredients = computed(() => {
 });
 
 const isEditPage = computed(() => route.name === 'edit-drink');
-
+const onModalOpen = () => {
+  emit("onModalOpen") 
+}
 const props = defineProps({
   cocktail: {
     type: Object,
@@ -283,8 +286,8 @@ onMounted(async () => {
     if (isEditPage) {
       const { cocktail } = props;
       formData.strDrink = cocktail.strDrink || '';
-      formData.strTags = cocktail.strTags || [];
-    //   formData.strTags = [];
+    //   formData.strTags = cocktail.strTags || [];
+      formData.strTags = [];
       formData.strVideo = cocktail.strVideo || '';
       formData.strCategory = cocktail.strCategory || '';
       formData.strAlcoholic = cocktail.strAlcoholic || '';

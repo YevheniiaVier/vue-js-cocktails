@@ -21,10 +21,9 @@ const props = defineProps({
 <style lang="scss" scoped>
 @import "../../assets/scss";
 .btn {
-  position: fixed;
-  z-index: 10;
-  top: 10;
-  left: 10;
+  position: absolute;
+  top: 10px;
+  left: 10px;
   display: inline-block;
   font-size: 18px;
   background: $main-color;
@@ -46,7 +45,7 @@ const props = defineProps({
     background: $accent-color;
     border: 1px solid darken($accent-color, 10%);
   }
-  @include transition(background-color);
+
 
   &__content {
     &--hidden {
