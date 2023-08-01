@@ -283,17 +283,16 @@ const props = defineProps({
   },
   photoName: {
     type: String,
-
   },
 });
 
 onMounted(async () => {
-  console.log('props.photoName', props.photoName)
-  console.log('formData.str', formData.strDrinkThumb)
   try {
     await store.dispatch('cocktails/getListIngredients');
     if (isEditPage) {
       const { cocktail } = props;
+      console.log('cocktail.strIngredient1', cocktail.strIngredient1);
+
       formData.strDrink = cocktail.strDrink || '';
       formData.strTags = [];
       formData.strVideo = cocktail.strVideo || '';
@@ -305,7 +304,9 @@ onMounted(async () => {
       formData.strInstructionsDE = cocktail.strInstructionsDE || '';
       formData.strInstructionsFR = cocktail.strInstructionsFR || '';
 
-      formData.strDrinkThumb = props.photoName ? props.photoName : cocktail.strDrinkThumb || '';
+      formData.strDrinkThumb = props.photoName
+        ? props.photoName
+        : cocktail.strDrinkThumb || '';
 
       formData.strIngredient1 = cocktail.strIngredient1 || '';
       formData.strIngredient2 = cocktail.strIngredient2 || '';
@@ -549,7 +550,7 @@ const handleSubmit = async () => {
     }
   }
 };
-watch(props, (newProps) => {
+watch(props, newProps => {
   if (newProps.photoName) {
     formData.strDrinkThumb = newProps.photoName;
   }

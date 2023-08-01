@@ -84,9 +84,9 @@ const handleSubmit = async () => {
       reset();
     } catch (error) {
       console.log(error);
-
+      const errorMessage = error.response?.data?.message || "An error occurred";
       $toast.open({
-        message: error,
+        message: errorMessage,
         type: "error",
         position: "top-right",
       });
