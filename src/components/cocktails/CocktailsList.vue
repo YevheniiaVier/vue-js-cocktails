@@ -22,8 +22,9 @@ const route = useRoute();
 const router = useRouter();
 
 let isBottomReached = false;
-const queryPage = computed(() => (route.query.page ? Number(route.query.page) : 1));
+// const queryPage = computed(() => (route.query.page ? Number(route.query.page) : 1));
 const keyword = computed(() => (route.query.k ? route.query.k : ''));
+const category = computed(() => (route.query.a ? route.query.a : ''));
 
 const page = ref(1);
 const props = defineProps({
@@ -48,7 +49,8 @@ const props = defineProps({
 
 onMounted(async () => {
   window.addEventListener('scroll', handleScroll);
-  page.value = queryPage.value || 1;
+  router.push({ query: { ...route.query, page: 1 } });
+  page.value =  1;
 });
 
 onUnmounted(async () => {
@@ -77,15 +79,16 @@ const handleScroll = e => {
 };
 
 watch(
-  () => keyword.value,
-  (newValue, oldValue) => {
-    if (newValue !== oldValue) {
-    router.push({ query: { ...route.query, page: 1 } });
-    page.value = 1; 
-
+  [keyword, category],
+  ([newKeyword, newCategory], [oldKeyword, oldCategory]) => {
+    if (newKeyword !== oldKeyword || newCategory !== oldCategory) {
+      router.push({ query: { ...route.query, page: 1 } });
+      page.value = 1;
     }
   }
 );
+
+
 </script>
 
 <style lang="scss" scoped>

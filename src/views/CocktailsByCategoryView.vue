@@ -1,136 +1,79 @@
 <template>
   <AppContainer>
-    <CocktailsFilterForm
-      :loading="loading"
-      @onSelect="onSelect"
-      @submit="handleSearch"
-    />
+    <CocktailsFilterForm :loading="loading" @onSelect="onSelect" />
     <p v-if="emptySearch">No results for your search</p>
     <CocktailsList
       :hasMoreData="hasMoreData"
-
       :loading="loading"
       :cocktails="cocktails || []"
     />
   </AppContainer>
 </template>
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-import { useStore } from 'vuex';
-const store = useStore();
-
+import { searchDrinksByFilter } from '../services/cocktails-api';
 import CocktailsList from '@/components/cocktails/CocktailsList.vue';
 import CocktailsFilterForm from '@/components/cocktails/CocktailsFilterForm.vue';
 import AppContainer from '@/components/shared/AppContainer.vue';
-import { useToast } from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
 
+const route = useRoute();
+const router = useRouter();
 const hasMoreData = ref(true);
-const searchedCocktails = computed(() => {
-  return store.getters['cocktails/getSearchedCocktails'];
-});
-const $toast = useToast();
-
-const filteredCocktails = computed(() => {
-  return store.getters['cocktails/getFilteredCocktails'];
-});
-
-const keyword = ref('');
 const loading = ref(false);
 const emptySearch = ref(false);
 const cocktails = ref([]);
-const page = ref(1);
 const searchCategory = ref('');
-const handleSearch = data => {
-  keyword.value = data.inputValue;
-  if (!keyword.value) {
-    $toast.open({
-      message: 'Please enter something',
-      type: 'warning',
-      position: 'top-right',
-    });
-  }
-  if (keyword.value) {
-    searchCocktails(keyword.value, page.value);
-  }
-};
+const page = computed(() => (route.query.page ? Number(route.query.page) : 1));
 
 const onSelect = async category => {
-  searchCategory.value = category;
   cocktails.value = [];
-  await store.dispatch('filter/setFilter', category);
-  searchCocktails(keyword.value);
+  if (!category) {
+    router.push({ query: { page: 1, a: '' } });
+    return;
+  }
+
+  searchCategory.value =
+    category === 'Non alcoholic' ? 'Non_Alcoholic' : 'Alcoholic';
+  await router.push({ query: { page: 1, a: searchCategory.value } });
+  await searchCocktails(searchCategory.value);
 };
 
-// const changePage = p => {
-//   page.value = p;
-//   searchCocktails(keyword.value, page.value);
-// };
-
-async function searchCocktails(query, page = 1) {
+const searchCocktails = async category => {
   try {
-    loading.value = true;
-    await store.dispatch('cocktails/searchCocktailsByName', { query, page });
-    console.log(
-      'searchedCocktails.value.length',
-      searchedCocktails.value.length
-    );
-    console.log('hasMoreData when page1', hasMoreData)
-
-    // console.log(
-    //   'filteredCocktails.value.length',
-    //   filteredCocktails.value.length
-    // );
-    // hasMoreData.value = false;
-    if (searchedCocktails.value.length === 0 && page === 1) {
-      console.log('hasMoreData when page1', hasMoreData)
-      emptySearch.value = true;
-    } else {
-      hasMoreData.value = true;
-    }
-    cocktails.value = [...cocktails.value, ...filteredCocktails.value];
-
-    // if (searchedCocktails.value.length === 0 && page === 1) {
-    //   emptySearch.value = true;
-    //   return;
-    // }
-
-    if (searchedCocktails.value.length < 10 && page !== 1 ) {
-      console.log('cocktails.length', searchedCocktails.value.length);
+    const { drinks } = await searchDrinksByFilter(category, page.value, 'a');
+    if (drinks.length <= 9) {
       hasMoreData.value = false;
     } else {
       hasMoreData.value = true;
     }
+    cocktails.value.push(...drinks);
   } catch (error) {
     console.log(error);
-    $toast.open({
-      message: error,
-      type: 'error',
-      position: 'top-right',
-    });
-  } finally {
-    loading.value = false;
   }
+};
 
-  emptySearch.value = false;
-  return;
-}
-watch(keyword, () => {
-  console.log('keyword.value', keyword.value);
-  cocktails.value = [];
-  page.value = 1;
-  emptySearch.value = false;
-  hasMoreData.value = true;
+onMounted(() => {
+  searchCategory.value = route.query.a ? route.query.a : '';
+  if (searchCategory.value) {
+    searchCocktails(searchCategory.value);
+  }
 });
 
-// watch(searchCategory, () => {
-//   console.log('searchCategory.value', searchCategory.value);
-//   //   cocktails.value = [];
-//   page.value = 1;
-//   emptySearch.value = false;
-//   hasMoreData.value = true;
-// });
+watch(
+  () => page.value,
+  (newValue, oldValue) => {
+    if (newValue === 1) {
+      console.log('newValue', newValue);
+      console.log('oldValue', oldValue);
+
+      return;
+    }
+    searchCocktails(searchCategory.value);
+  }
+);
 </script>
 <style lang="scss" scoped>
 .title {

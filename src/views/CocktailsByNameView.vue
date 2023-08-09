@@ -14,38 +14,34 @@
 import { ref, computed, watch, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
+import { useToast } from 'vue-toast-notification';
 
 import CocktailsList from '@/components/cocktails/CocktailsList.vue';
 import CocktailsFilterForm from '@/components/cocktails/CocktailsFilterForm.vue';
 import AppContainer from '@/components/shared/AppContainer.vue';
-import { useToast } from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
 
 const store = useStore();
 const route = useRoute();
-
-const hasMoreData = ref(true);
+const router = useRouter();
+const $toast = useToast();
 
 const searchedCocktails = computed(() => {
   return store.getters['cocktails/getSearchedCocktails'];
 });
-const $toast = useToast();
-
 const page = computed(() => (route.query.page ? Number(route.query.page) : 1));
 
+const hasMoreData = ref(true);
 const keyword = ref('');
 const loading = ref(false);
 const emptySearch = ref(false);
 const cocktails = ref([]);
 const queryKeyword = computed(() => (route.query.k ? route.query.k : ''));
 
-const router = useRouter();
-
 onMounted(async () => {
   if (queryKeyword.value !== '') {
     keyword.value = queryKeyword.value;
     searchCocktails(queryKeyword.value, page.value);
-
   }
 });
 
@@ -64,7 +60,7 @@ const handleSearch = data => {
   }
   if (keyword.value) {
     searchCocktails(keyword.value, page.value);
-    router.push({ query: { k: keyword.value } });
+    router.push({ query: { ...route.query, k: keyword.value } });
   }
 };
 
@@ -77,7 +73,6 @@ async function searchCocktails(query, page = 1) {
       emptySearch.value = true;
       return;
     }
-
     if (searchedCocktails.value.length <= 9) {
       hasMoreData.value = false;
     } else {
@@ -94,7 +89,6 @@ async function searchCocktails(query, page = 1) {
   } finally {
     loading.value = false;
   }
-
   return;
 }
 
@@ -108,6 +102,7 @@ watch(page, () => {
   searchCocktails(keyword.value, page.value);
 });
 </script>
+
 <style lang="scss" scoped>
 .title {
   color: white;
@@ -118,6 +113,5 @@ watch(page, () => {
 .empty-message {
   text-align: center;
   font-size: 25px;
-
 }
 </style>

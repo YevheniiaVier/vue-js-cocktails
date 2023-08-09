@@ -1,85 +1,86 @@
 <template>
-    <AppContainer>
-      <AppLetters />
-  
-      <CocktailsList
-        :hasMoreData="hasMoreData"
-        @updatePage="getNewDrinks"
-        v-if="cocktails.length > 0"
-        :cocktails="cocktails"
-      />
-      <p class="error__message" v-if="emptyResult">
-        There are no drinks for letter {{ letterToDisplay }}, please try another
-        one
-      </p>
-    </AppContainer>
-  </template>
-  <script setup>
-  import { useRoute, useRouter } from 'vue-router';
-  import { onMounted, computed, watch, ref } from 'vue';
-  
-  import CocktailsList from '../components/cocktails/CocktailsList.vue';
-  
-  import AppLetters from '../components/shared/AppLetters.vue';
-  import AppContainer from '../components/shared/AppContainer.vue';
-  import CircleLoader from '../components/loaders/CircleLoader.vue';
-  import { getCocktailsByLetter } from '../services/cocktails-api';
-  const route = useRoute();
-  
-  const letterToDisplay = ref(route.params.letter);
-  const emptyResult = ref(false);
-  const hasMoreData = ref(true);
-  
-  const cocktails = ref([]);
-  const letter = computed(() =>
-    route.params.letter ? route.params.letter : 'A'
-  );
-  
-  const setEmptyResult = () => {
-    if (cocktails.value.length === 0) {
-      emptyResult.value = true;
-    } else {
-      emptyResult.value = false;
-    }
-  };
-  
-  const getNewDrinks = async (page = 1) => {
-    try {
-      const { drinks } = await getCocktailsByLetter(letter.value, page);
-  
-      if (drinks.length === 0) {
-        hasMoreData.value = false;
-      } else {
-        hasMoreData.value = true;
-      }
-      cocktails.value.push(...drinks);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  
-  watch(letter, async () => {
-    emptyResult.value = false;
-    cocktails.value = [];
-    await getNewDrinks();
-    letterToDisplay.value = letter;
-    setEmptyResult();
-  });
-  
-  onMounted(async () => {
-    letterToDisplay.value = letter;
-    await getNewDrinks();
-    setEmptyResult();
-  });
-  </script>
-  
-  <style lang="scss" scoped>
-  @import '../assets/scss';
-  
-  .error__message {
-    text-align: center;
-    margin-top: 20px;
-    font-size: 25px;
+  <AppContainer>
+    <CocktailsFilterForm :loading="loading" @onSelect="onSelect" />
+    <p v-if="emptySearch">No results for your search</p>
+    <CocktailsList
+      :hasMoreData="hasMoreData"
+      :loading="loading"
+      :cocktails="cocktails || []"
+    />
+  </AppContainer>
+</template>
+<script setup>
+import { ref, computed, watch, onMounted } from 'vue';
+import { useStore } from 'vuex';
+import { useRoute, useRouter } from 'vue-router';
+
+import { searchDrinksByFilter } from '../services/cocktails-api';
+import CocktailsList from '@/components/cocktails/CocktailsList.vue';
+import CocktailsFilterForm from '@/components/cocktails/CocktailsFilterForm.vue';
+import AppContainer from '@/components/shared/AppContainer.vue';
+import 'vue-toast-notification/dist/theme-sugar.css';
+
+const route = useRoute();
+const router = useRouter();
+
+const hasMoreData = ref(true);
+const loading = ref(false);
+const emptySearch = ref(false);
+const cocktails = ref([]);
+
+const searchCategory = ref('');
+const page = computed(() => (route.query.page ? Number(route.query.page) : 1));
+
+const onSelect = async category => {
+  cocktails.value = [];
+  if (!category) {
+    router.push({ query: { page: 1, a: '' } });
+    return;
   }
-  </style>
-  
+
+  searchCategory.value =
+    category === 'Non alcoholic' ? 'Non_Alcoholic' : 'Alcoholic';
+  await router.push({ query: { page: 1, a: searchCategory.value } });
+  await searchCocktails(searchCategory.value);
+};
+
+const searchCocktails = async category => {
+  try {
+    const { drinks } = await searchDrinksByFilter(category, page.value, 'a');
+    if (drinks.length <= 9) {
+      hasMoreData.value = false;
+    } else {
+      hasMoreData.value = true;
+    }
+    cocktails.value.push(...drinks);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+onMounted(() => {
+  searchCategory.value = route.query.a ? route.query.a : '';
+  if (searchCategory.value) {
+    searchCocktails(searchCategory.value);
+  }
+});
+
+watch(
+  () => page.value,
+  (newValue, oldValue) => {
+    if (newValue === 1) {
+      return;
+    }
+    searchCocktails(searchCategory.value);
+  }
+);
+
+</script>
+<style lang="scss" scoped>
+.title {
+  color: white;
+  font-size: 25px;
+  text-align: center;
+  margin-top: 10px;
+}
+</style>
