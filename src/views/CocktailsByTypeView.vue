@@ -11,7 +11,6 @@
 </template>
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
-import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
 
 import { searchDrinksByFilter } from '../services/cocktails-api';
@@ -58,10 +57,12 @@ const searchCocktails = async category => {
   }
 };
 
-onMounted(() => {
+onMounted(async () => {
   searchCategory.value = route.query.a ? route.query.a : '';
+  await router.push({ query: { page: 1 } });
+
   if (searchCategory.value) {
-    searchCocktails(searchCategory.value);
+    await searchCocktails(searchCategory.value);
   }
 });
 

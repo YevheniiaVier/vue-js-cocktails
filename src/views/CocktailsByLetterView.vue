@@ -14,14 +14,13 @@
   </AppContainer>
 </template>
 <script setup>
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { onMounted, computed, watch, ref } from 'vue';
 
 import CocktailsList from '../components/cocktails/CocktailsList.vue';
 
 import AppLetters from '../components/shared/AppLetters.vue';
 import AppContainer from '../components/shared/AppContainer.vue';
-// import CircleLoader from '../components/loaders/CircleLoader.vue';
 import { getCocktailsByLetter } from '../services/cocktails-api';
 const route = useRoute();
 
