@@ -1,8 +1,8 @@
 <template>
   <AppContainer>
-    <h1 class="title">Find your cocktail here</h1>
+    <!-- <h1 class="title">Find your cocktail here</h1> -->
     <CocktailsFilterForm :loading="loading" @submit="handleSearch" />
-    <p v-if="emptySearch">No results for your search</p>
+    <p class="empty-message" v-if="emptySearch">No results for your search</p>
     <CocktailsList
       :hasMoreData="hasMoreData"
       :loading="loading"
@@ -74,10 +74,7 @@ async function searchCocktails(query, page = 1) {
     await store.dispatch('cocktails/searchCocktailsByName', { query, page });
     emptySearch.value = false;
     if (searchedCocktails.value.length === 0) {
-      console.log('searchedCocktails.value.length', searchedCocktails.value.length)
-
       emptySearch.value = true;
-      console.log('emptySearch', emptySearch.value)
       return;
     }
 
@@ -117,5 +114,10 @@ watch(page, () => {
   font-size: 25px;
   text-align: center;
   margin-top: 10px;
+}
+.empty-message {
+  text-align: center;
+  font-size: 25px;
+
 }
 </style>

@@ -4,7 +4,6 @@
     <h2 class="title">{{ sectionTitle }}</h2>
     <CocktailsList
       :hasMoreData="hasMoreData"
-      @updatePage="getNewDrinks"
       v-if="cocktails.length > 0"
       :cocktails="cocktails"
     />
@@ -24,7 +23,7 @@ import AppContainer from '../components/shared/AppContainer.vue';
 import { searchDrinksByFilter } from '../services/cocktails-api';
 const route = useRoute();
 const router = useRouter();
-
+const page = computed(() => (route.query.page ? Number(route.query.page) : 1));
 const emptyResult = ref(false);
 const hasMoreData = ref(true);
 
@@ -37,7 +36,8 @@ const titles = {
 };
 
 const sectionTitle = computed(() => {
-  const filterToShow = filter.value === "Non_Alcoholic" ? "Non alcoholic" : filter.value;
+  const filterToShow =
+    filter.value === 'Non_Alcoholic' ? 'Non alcoholic' : filter.value;
   const titlePrefix = titles[filterParam.value] || '';
   return `${titlePrefix} "${filterToShow}"`;
 });
@@ -49,7 +49,10 @@ const goBack = () => {
   window.history.length > 1 ? router.go(-1) : router.push('/');
 };
 
-
+onMounted(async () => {
+  await getNewDrinks();
+  setEmptyResult();
+});
 
 const setEmptyResult = () => {
   if (cocktails.value.length === 0) {
@@ -59,11 +62,11 @@ const setEmptyResult = () => {
   }
 };
 
-const getNewDrinks = async (page = 1) => {
+const getNewDrinks = async () => {
   try {
     const { drinks } = await searchDrinksByFilter(
       filter.value,
-      page,
+      page.value,
       filterParam.value
     );
 
@@ -86,10 +89,8 @@ watch(filter, async () => {
   setEmptyResult();
 });
 
-onMounted(async () => {
-  await getNewDrinks();
-  setEmptyResult();
-
+watch(page, () => {
+  getNewDrinks();
 });
 </script>
 
