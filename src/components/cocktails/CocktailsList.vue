@@ -82,9 +82,7 @@ watch(
     if (newValue !== oldValue) {
     router.push({ query: { ...route.query, page: 1 } });
     page.value = 1; 
-      // console.log('old value', oldValue)
-      // console.log(' newValue', newValue)
-      // console.log('page.value', page.value)
+
     }
   }
 );

@@ -2,7 +2,7 @@
   <AppContainer>
     <h1 class="title">Find your cocktail here</h1>
     <CocktailsFilterForm :loading="loading" @submit="handleSearch" />
-    <p v-if="emptySearch && page === 1">No results for your search</p>
+    <p v-if="emptySearch">No results for your search</p>
     <CocktailsList
       :hasMoreData="hasMoreData"
       :loading="loading"
@@ -42,15 +42,19 @@ const queryKeyword = computed(() => (route.query.k ? route.query.k : ''));
 const router = useRouter();
 
 onMounted(async () => {
-  if(queryKeyword.value !== '') {
+  if (queryKeyword.value !== '') {
     keyword.value = queryKeyword.value;
     searchCocktails(queryKeyword.value, page.value);
+
   }
-}); 
+});
 
 const handleSearch = data => {
-  keyword.value = data.inputValue;
-
+  const newKeyword = data.inputValue;
+  if (newKeyword === keyword.value) {
+    return;
+  }
+  keyword.value = newKeyword;
   if (!keyword.value) {
     $toast.open({
       message: 'Please enter something',
@@ -70,11 +74,14 @@ async function searchCocktails(query, page = 1) {
     await store.dispatch('cocktails/searchCocktailsByName', { query, page });
     emptySearch.value = false;
     if (searchedCocktails.value.length === 0) {
-      emptySearch.value = true;
-      return;
-    } 
+      console.log('searchedCocktails.value.length', searchedCocktails.value.length)
 
-    if(searchedCocktails.value.length <= 9 ) {
+      emptySearch.value = true;
+      console.log('emptySearch', emptySearch.value)
+      return;
+    }
+
+    if (searchedCocktails.value.length <= 9) {
       hasMoreData.value = false;
     } else {
       hasMoreData.value = true;
@@ -103,8 +110,6 @@ watch(keyword, () => {
 watch(page, () => {
   searchCocktails(keyword.value, page.value);
 });
-
-
 </script>
 <style lang="scss" scoped>
 .title {
