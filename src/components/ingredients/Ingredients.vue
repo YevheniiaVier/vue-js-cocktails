@@ -25,13 +25,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { computed } from 'vue';
 import { useStore } from 'vuex';
 
-import { getAllOfIngredients } from '../../services/ingredients-api';
 const store = useStore();
 
-const ingredients = ref([]);
+const ingredients = computed(() => {
+  return store.getters['cocktails/getIngredients'];
+});
 
 const props = defineProps({
   cocktail: {
@@ -40,14 +41,7 @@ const props = defineProps({
   },
 });
 
-onMounted(async () => {
-  try {
-    const result = await getAllOfIngredients();
-    ingredients.value = [...result.ingredients];
-  } catch (error) {
-    console.log(error);
-  }
-});
+
 
 const getRouterLink = name => {
   const data = ingredients.value.find(el => el.strIngredient.toLowerCase() === name.toLowerCase());

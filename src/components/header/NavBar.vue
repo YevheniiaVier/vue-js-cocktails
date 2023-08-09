@@ -11,7 +11,7 @@
     <RouterLink
       class="link"
       exact-active-class="active-link"
-      :to="{ name: 'byName' }"
+      :to="{ name: 'search' }"
     >
       Search Cocktails
     </RouterLink>

@@ -288,10 +288,9 @@ const props = defineProps({
 
 onMounted(async () => {
   try {
-    await store.dispatch('cocktails/getListIngredients');
+    // await store.dispatch('cocktails/getListIngredients');
     if (isEditPage) {
       const { cocktail } = props;
-      console.log('cocktail.strIngredient1', cocktail.strIngredient1);
 
       formData.strDrink = cocktail.strDrink || '';
       formData.strTags = [];

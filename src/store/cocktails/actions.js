@@ -1,5 +1,6 @@
 import * as api from "../../services/cocktails-api";
 import * as ingApi from "../../services/ingredients-api";
+
 export const searchCocktailsByName = async ({ commit }, {query, page}) => {
   const { drinks } = await api.searchCocktailByName(query, page);
 

@@ -2,6 +2,7 @@
   <div class="by__letter">
     <RouterLink
       v-for="letter of letters"
+      exact-active-class="active-link"
       :key="letter"
       :to="{ name: 'by-letter', params: { letter } }"
       >{{ letter }}</RouterLink
@@ -23,5 +24,8 @@ const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
   font-weight: bold;
   gap: 5px;
   margin-top: 20px;
+}
+.active-link {
+  color: $white-color;
 }
 </style>

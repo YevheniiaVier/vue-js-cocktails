@@ -2,23 +2,21 @@
   <AppContainer>
     <AppLetters />
 
-
-        <CocktailsList
-          :hasMoreData="hasMoreData"
-          @updatePage="getNewDrinks"
-          v-if="cocktails.length > 0"
-          :cocktails="cocktails"
-        />
-        <p class="error__message" v-if="emptyResult">
-          There are no drinks for letter {{ letterToDisplay }}, please try
-          another one
-        </p>
-  
+    <CocktailsList
+      :hasMoreData="hasMoreData"
+      @updatePage="getNewDrinks"
+      v-if="cocktails.length > 0"
+      :cocktails="cocktails"
+    />
+    <p class="error__message" v-if="emptyResult">
+      There are no drinks for letter {{ letterToDisplay }}, please try another
+      one
+    </p>
   </AppContainer>
 </template>
 <script setup>
 import { useRoute, useRouter } from 'vue-router';
-import { onMounted,  computed, watch, ref } from 'vue';
+import { onMounted, computed, watch, ref } from 'vue';
 
 import CocktailsList from '../components/cocktails/CocktailsList.vue';
 
@@ -31,7 +29,6 @@ const route = useRoute();
 const letterToDisplay = ref(route.params.letter);
 const emptyResult = ref(false);
 const hasMoreData = ref(true);
-
 
 const cocktails = ref([]);
 const letter = computed(() =>

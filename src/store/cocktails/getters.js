@@ -14,6 +14,7 @@ export const getFilteredCocktails = (
   rootState
 ) => {
   const filter = rootState.filter.filter;
+  
   if (filter) {
     const filteredCocktails = searchedCocktails.filter(
       (cocktail) => cocktail.strAlcoholic === filter

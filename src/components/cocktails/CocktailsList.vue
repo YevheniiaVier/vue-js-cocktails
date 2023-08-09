@@ -6,45 +6,55 @@
       :key="cocktail._id"
     />
   </ul>
-  <GoUpButton v-if="props.cocktails.length > 1"/>
-  <p v-if="showMessage" class="message">There are no more drinks</p>
+  <GoUpButton v-if="props.cocktails.length > 1" />
+  <p v-if="!hasMoreData" class="message">There are no more drinks</p>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
 import CocktailItem from './CocktailItem.vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import GoUpButton from '../shared/GoUpButton.vue';
 
 const scrollEl = ref(null);
-const page = ref(1);
-const emit = defineEmits(['updatePage']);
+
+const route = useRoute();
+const router = useRouter();
+
 let isBottomReached = false;
+const queryPage = computed(() => (route.query.page ? Number(route.query.page) : 1));
+const keyword = computed(() => (route.query.k ? route.query.k : ''));
+
+const page = ref(1);
 const props = defineProps({
   cocktails: {
     required: true,
     type: Array,
   },
+
   hasMoreData: {
     type: Boolean,
     default: true,
   },
+  emptySearch: {
+    type: Boolean,
+    default: false,
+  },
   loading: {
     type: Boolean,
   },
+
 });
+
 onMounted(async () => {
-  if (
-    props.cocktails.length <= 1
-  ) {
-    return;
-  }
   window.addEventListener('scroll', handleScroll);
+  page.value = queryPage.value || 1;
 });
 
 onUnmounted(async () => {
   window.removeEventListener('scroll', handleScroll);
 });
+
 const handleScroll = e => {
   if (!props.hasMoreData) {
     return;
@@ -54,23 +64,30 @@ const handleScroll = e => {
     !isBottomReached &&
     element.getBoundingClientRect().bottom < window.innerHeight
   ) {
-    isBottomReached = true; // Set the flag to true once bottom is reached
+    isBottomReached = true;
     page.value += 1;
-    emit('updatePage', page.value);
+    router.push({ query: { ...route.query, page: page.value } });
+
   } else if (
     isBottomReached &&
     element.getBoundingClientRect().bottom >= window.innerHeight
   ) {
-    isBottomReached = false; // Reset the flag when scrolling back up
+    isBottomReached = false;
   }
 };
-const route = useRoute();
 
-const showMessage = computed(() => {
-  if (props.hasOwnProperty('hasMoreData')) {
-    return !props.hasMoreData;
+watch(
+  () => keyword.value,
+  (newValue, oldValue) => {
+    if (newValue !== oldValue) {
+    router.push({ query: { ...route.query, page: 1 } });
+    page.value = 1; 
+      // console.log('old value', oldValue)
+      // console.log(' newValue', newValue)
+      // console.log('page.value', page.value)
+    }
   }
-});
+);
 </script>
 
 <style lang="scss" scoped>

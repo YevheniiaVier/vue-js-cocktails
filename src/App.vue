@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted,  ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { RouterView } from 'vue-router';
 import AppHeader from './components/header/index.vue';
 import AppFooter from './components/AppFooter.vue';
@@ -11,7 +11,11 @@ const ingredientsLoaded = ref(false);
 onMounted(async () => {
   try {
     await store.dispatch('auth/refreshUser');
-    await store.dispatch('cocktails/getListIngredients');
+    if (!ingredientsLoaded.value) {
+      await store.dispatch('cocktails/getListIngredients');
+      await store.dispatch('cocktails/getAllIngredients');
+      ingredientsLoaded.value = true;
+    }
   } catch (error) {
     console.log('error', message);
   }

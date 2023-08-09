@@ -1,13 +1,13 @@
 <template>
   <AppForm class="form" @submit="handleSubmit">
-    <AppSelect
+    <AppSelect v-if="!isByNamePage"
       @select="onSelect"
       v-model="formData.category"
       :items="selectItems"
       class="form__select"
       id="category"
     />
-    <AppInput
+    <AppInput v-else
       id="searchInput"
       placeholder="search for cocktail"
       class="form__input"
@@ -20,12 +20,15 @@
 </template>
 
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted } from "vue";
+import { useRoute } from 'vue-router';
 import AppButton from "../shared/AppButton.vue";
 import AppInput from "../shared/form/AppInput.vue";
 import AppForm from "../shared/form/AppForm.vue";
 import AppSelect from "../shared/form/AppSelect.vue";
 const emit = defineEmits(["submit", "onSelect"]);
+const route = useRoute();
+const isByNamePage = route.name === "by-name";
 
 const handleSubmit = () => {
   emit("submit", {
@@ -52,6 +55,14 @@ const selectItems = reactive([
 
 const onSelect = (value) => {
   emit("onSelect", value);
+  console.log('value', value)
 };
+
+onMounted(() => {
+  if (route.query.k) {
+    formData.searchInput = route.query.k;
+  }
+});
+
 </script>
 <style lang="scss" scoped></style>
