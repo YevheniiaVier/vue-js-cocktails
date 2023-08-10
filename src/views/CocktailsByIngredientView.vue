@@ -4,6 +4,7 @@
       <input
         class="search__input"
         @input="onIngredientInput"
+        @keydown.enter="onPressEnter"
         id="ingredient"
         placeholder="Choose ingredient"
         label="Choose ingredient"
@@ -20,14 +21,15 @@
           {{ ingredient.strIngredient }}
         </li>
       </ul>
+    </div>
       <CocktailsList
-      v-if="!emptySearch"
+        v-if="!emptySearch"
         :hasMoreData="hasMoreData"
         :loading="loading"
         :cocktails="cocktails || []"
       />
-      <p v-else>No cocktails with this ingredient. please try another one</p>
-    </div>
+      <p class="empty__message" v-else>No cocktails with this ingredient. Please try another one</p>
+   
   </AppContainer>
 </template>
 <script setup>
@@ -66,6 +68,13 @@ const onIngredientInput = () => {
   filteredIngredients.value = ingredients.value.filter(ingredient =>
     ingredient.strIngredient.toLowerCase().includes(ingredientToSearch.value)
   );
+};
+const onPressEnter = () => {
+  console.log('pressingthe enter button')
+  cocktails.value = [];
+  filteredIngredients.value = [];
+  hasMoreData.value = true;
+  searchCocktails(formData.ingredient);
 };
 
 const onIngredientSelect = async ingredient => {
@@ -127,20 +136,24 @@ watch(
   () => ingredientToSearch.value,
   (newValue, oldValue) => {
     if (newValue !== oldValue) {
-       router.push({ query: { ...route.query, page: 1 } });
+      router.push({ query: { ...route.query, page: 1 } });
     }
-    
   }
 );
 </script>
 <style lang="scss" scoped>
 @import '../assets/scss/';
 .search__wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
+
 }
 
 .search__input {
-  width: 100%;
+  width: 500px;
   padding: 10px;
   border: 2px solid $accent-color;
   border-radius: 5px;
@@ -156,10 +169,11 @@ watch(
 }
 
 .ingredients__list {
-  /* position: absolute;
+  z-index: 10;
+  position: absolute;
   top: 100%;
   left: 0;
-  right: 0; */
+  right: 0;
   background-color: $main-color;
   border: 1px solid $main-color;
   border-radius: 5px;
@@ -177,5 +191,9 @@ watch(
 .ingredient__item:hover {
   background-color: $accent-color;
   color: $white-color;
+}
+.empty__message {
+  margin-top: 20px;
+  font-size: 20px;
 }
 </style>
