@@ -27,7 +27,7 @@ const props = defineProps({
   display: inline-block;
   font-size: 18px;
   background: $main-color;
-  // color: #fff;
+  z-index: 5;
   cursor: pointer;
   min-width: 100px;
   border: 1px solid transparent;

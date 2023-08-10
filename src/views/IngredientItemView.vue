@@ -14,8 +14,7 @@
       <h2 class="ingredient__drinks-title">Drinks with {{ ingredient.strIngredient }}</h2>
       <CocktailsList
         :hasMoreData="hasMoreData"
-        @updatePage="getDrinks"
-        v-if="cocktails.length > 0"
+             v-if="cocktails.length > 0"
         :cocktails="cocktails"
       />
     </section>
@@ -50,20 +49,21 @@ const hasMoreData = ref(true);
 const cocktails = ref([]);
 
 const ingredientId = computed(() => (route.params.id ? route.params.id : ''));
+const page = computed(() => route.query.page ? Number(route.query.page) : 1);
 
 const user = computed(() => {
   return store.getters['auth/getUser'];
 });
 
-const getDrinks = async (page = 1) => {
+const getDrinks = async () => {
   try {
     const { drinks } = await searchDrinksByFilter(
       ingredient.value.strIngredient.toLowerCase(),
-      page,
+      page.value,
       'i'
     );
 
-    if (drinks.length === 0) {
+    if (drinks.length <= 9) {
       hasMoreData.value = false;
     } else {
       hasMoreData.value = true;
@@ -75,12 +75,14 @@ const getDrinks = async (page = 1) => {
 };
 
 onMounted(async () => {
+  // searchCategory.value = route.query.a ? route.query.a : '';
+  await router.push({ query: { ...route.query, page: 1 } });
   isLoading.value = true;
   try {
     const result = await getIngredientById(ingredientId.value);
     ingredient.value = { ...result } || {};
     isMyIngredient.value = ingredient.value?.owner === user.value._id;
-    getDrinks();
+    await getDrinks();
   } catch (error) {
     console.log(error);
   } finally {
@@ -106,6 +108,17 @@ const onDeleteIngredient = async () => {
 const goBack = () => {
   window.history.length > 1 ? router.go(-1) : router.push('/');
 };
+
+watch(
+  () => page.value,
+  (newValue, oldValue) => {
+    if (newValue === 1) {
+      return;
+    }
+    getDrinks();
+  }
+);
+
 </script>
 
 <style lang="scss" scoped>

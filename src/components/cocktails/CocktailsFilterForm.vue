@@ -55,7 +55,7 @@ const formData = reactive({
 });
 
 const selectItems = ref([
-  { value: '', label: 'Category', selected: true },
+  { value: '', label: 'Type', selected: true },
   { value: 'Alcoholic', label: 'Alcoholic', selected: false },
   { value: 'Non alcoholic', label: 'Non alcoholic', selected: false },
 ]);

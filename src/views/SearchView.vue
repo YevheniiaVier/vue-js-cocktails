@@ -1,14 +1,14 @@
 <template>
-    <AppContainer class="nav__container">
-      <nav class="navigation">
-        <RouterLink
+  <AppContainer class="nav__container">
+    <nav class="navigation">
+      <RouterLink
         class="link"
         exact-active-class="active-link"
         :to="{ name: 'by-name' }"
       >
         By name
       </RouterLink>
-  
+
       <RouterLink
         class="link"
         exact-active-class="active-link"
@@ -18,10 +18,10 @@
       </RouterLink>
       <RouterLink
         class="link"
-        exact-active-class="active-link"
-        :to="{ name: 'by-letter', params: { letter: 'A' } }"
+        :class="{ 'active-link': isByLetterActive }"
+        :to="generateLetterLink('A')"
       >
-      By letter
+        By letter
       </RouterLink>
       <RouterLink
         class="link"
@@ -44,28 +44,35 @@
       >
         By ingredient
       </RouterLink>
-      </nav>
-   
-      <RouterView/>
-       
-    </AppContainer>
-  </template>
-  
-  <script setup>
-  import AppContainer from "@/components/shared/AppContainer.vue";
-  </script>
-  
-  <style lang="scss" scoped>
-  @import "../assets/scss";
-  
-  .navigation {
-    display: flex;
-    // width: 60%;
-    gap: 15px;
-    // flex-direction: column;
-    justify-content: space-between;
-  }
-  .link {
+    </nav>
+
+    <RouterView />
+  </AppContainer>
+</template>
+
+<script setup>
+import AppContainer from '@/components/shared/AppContainer.vue';
+import { useRoute } from 'vue-router';
+import { computed } from 'vue';
+const route = useRoute();
+
+const generateLetterLink = letter => {
+  return { name: 'by-letter', params: { letter } };
+};
+const isByLetterActive = computed(() => {
+  return route.name === 'by-letter';
+});
+</script>
+
+<style lang="scss" scoped>
+@import '../assets/scss';
+
+.navigation {
+  display: flex;
+  gap: 15px;
+  justify-content: space-between;
+}
+.link {
   width: 120px;
   display: flex;
   justify-content: center;
@@ -75,17 +82,15 @@
   color: $text-color;
   background-color: $accent-color;
   transition: all 0.2s ease-in-out;
-  }
-  .active-link {
-    color: $white-color;
-    background-color: $text-color;
-    // font-weight: bold;
-  }
-  .nav__container {
-    display: flex;
-    flex-direction: column;
-  
-    align-items: center;
-  }
-  </style>
-  
+}
+.active-link {
+  color: $white-color;
+  background-color: $text-color;
+}
+.nav__container {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+}
+</style>

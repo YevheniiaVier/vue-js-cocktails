@@ -2,8 +2,8 @@
   <AppContainer>
     <AppSelect
       class="category-field"
-      @select="onSelect('strCategory', $event)"
-      id="strCategory"
+      @select="onSelect('category', $event)"
+      id="category"
       label="Category"
       :items="categorySelectItems"
       v-model="formData.category"
@@ -35,8 +35,6 @@ const emptySearch = ref(false);
 const cocktails = ref([]);
 const searchCategory = ref('');
 const page = computed(() => (route.query.page ? Number(route.query.page) : 1));
-
-
 
 const formData = reactive({
   category: '',
@@ -88,9 +86,8 @@ const searchCocktails = async category => {
 
 onMounted(async () => {
   cocktails.value = [];
-  await router.push({ query: { ...route.query, page: 1 }});
-  console.log('page.value', page.value);
-    (searchCategory.value = route.query.c ? route.query.c : '');
+  await router.push({ query: { ...route.query, page: 1 } });
+  searchCategory.value = route.query.c ? route.query.c : '';
   if (searchCategory.value) {
     categorySelectItems.value.forEach(item => {
       return (item.selected = item.value === route.query.c);

@@ -59,7 +59,7 @@ const searchCocktails = async category => {
 
 onMounted(async () => {
   searchCategory.value = route.query.a ? route.query.a : '';
-  await router.push({ query: { page: 1 } });
+  await router.push({ query: { ...route.query, page: 1 } });
 
   if (searchCategory.value) {
     await searchCocktails(searchCategory.value);
